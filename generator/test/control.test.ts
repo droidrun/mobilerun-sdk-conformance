@@ -13,7 +13,7 @@ describe('control fixtures', () => {
   });
 
   for (const kind of kinds) {
-    const cases: ControlCase[] = JSON.parse(readFileSync(join(dir, `${kind}.json`), 'utf8'));
+    const { cases }: { cases: ControlCase[] } = JSON.parse(readFileSync(join(dir, `${kind}.json`), 'utf8'));
     describe(kind, () => {
       test('has cases with unique names and lowercase hex', () => {
         expect(cases.length).toBeGreaterThan(0);

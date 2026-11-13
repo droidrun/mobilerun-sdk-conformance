@@ -45,6 +45,9 @@ export class FakeSchedule {
   }
 }
 
+// random() value that makes the jitter factor exactly 1.0.
+export const NO_JITTER = 0.5;
+
 export const EVENTS = [
   'attempt_mounted',
   'connected',
@@ -81,7 +84,7 @@ export interface Harness {
   apply(event: EventName): void;
 }
 
-export function makeHarness(random = 0.5): Harness {
+export function makeHarness(random = NO_JITTER): Harness {
   const schedule = new FakeSchedule();
   const calls = { remounts: 0, heals: 0 };
   const controller = createStreamReconnectController({
@@ -116,43 +119,25 @@ export function observe(h: Harness) {
   };
 }
 
-/** Replays a scenario as documented in the README. Returns the first mismatch or null. */
-export function replay(sc: Scenario): string | null {
-  const h = makeHarness(sc.random);
-  let i = 0;
-  const check = () => {
-    const wants = sc.expect.filter((e) => e.after_steps === i).sort((a, b) => a.at_ms - b.at_ms);
-    for (const e of wants) {
-      h.schedule.advanceTo(e.at_ms);
-      const got: Record<string, unknown> = observe(h);
-      if (e.defer_target_change !== undefined) got.defer_target_change = h.controller.shouldDeferTargetChange();
-      if (e.pending_timers !== undefined) got.pending_timers = h.schedule.pendingCount;
-      const { at_ms: _a, after_steps: _s, ...want } = e;
-      if (JSON.stringify(sortKeys(got)) !== JSON.stringify(sortKeys(want))) {
-        return `expect at ${e.at_ms}ms after ${i} steps: want ${JSON.stringify(want)} got ${JSON.stringify(got)}`;
-      }
-    }
-    return null;
+export function buildPolicy() {
+  const delay = (attempt: number, random: number) => streamReconnectDelayMs(attempt, () => random);
+  const attempts = [1, 2, 3, 4, 5, 6, 7, 10];
+  return {
+    max_attempts: STREAM_RECONNECT_MAX_ATTEMPTS,
+    ws_open_timeout_ms: STREAM_WS_OPEN_TIMEOUT_MS,
+    rtc_config_timeout_ms: STREAM_RTC_CONFIG_TIMEOUT_MS,
+    connect_timeout_ms: STREAM_CONNECT_TIMEOUT_MS,
+    stability_ms: STREAM_RECONNECT_STABILITY_MS,
+    backoff: {
+      base_delay_ms: 1000,
+      max_delay_ms: 30000,
+      formula:
+        'round(min(base_delay_ms * 2^(max(1, attempt) - 1), max_delay_ms) * (0.75 + random * 0.5)); random in [0, 1), random = 1 only as the upper-bound limit case',
+      rounding: 'round half toward +infinity (Math.round)',
+    },
+    delay_cases: attempts.flatMap((attempt) =>
+      [0, NO_JITTER, 1].map((random) => ({ attempt, random, delay_ms: delay(attempt, random) })),
+    ),
+    invariants: ['connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms'],
   };
-  for (;;) {
-    const bad = check();
-    if (bad) return bad;
-    if (i >= sc.steps.length) return null;
-    const st = sc.steps[i]!;
-    h.schedule.advanceTo(st.at_ms);
-    h.apply(st.event);
-    i += 1;
-  }
 }
-
-const sortKeys = (o: Record<string, unknown>) =>
-  Object.fromEntries(Object.entries(o).sort(([a], [b]) => a.localeCompare(b)));
-
-export const POLICY_SOURCE = {
-  STREAM_CONNECT_TIMEOUT_MS,
-  STREAM_RECONNECT_MAX_ATTEMPTS,
-  STREAM_RECONNECT_STABILITY_MS,
-  STREAM_RTC_CONFIG_TIMEOUT_MS,
-  STREAM_WS_OPEN_TIMEOUT_MS,
-  streamReconnectDelayMs,
-};

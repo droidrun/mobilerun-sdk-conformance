@@ -23,30 +23,7 @@
   ],
   "examples": [
     {
-      "name": "initial reply",
-      "json": {
-        "type": "rtcConfiguration",
-        "rtcConfiguration": {
-          "iceServers": [
-            {
-              "urls": [
-                "stun:stun.example.test:3478"
-              ]
-            },
-            {
-              "urls": [
-                "turn:turn.example.test:3478?transport=udp",
-                "turns:turn.example.test:5349?transport=tcp"
-              ],
-              "username": "1700000000:user",
-              "credential": "cred-example"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "mid-session refresh",
+      "name": "initial reply or refresh",
       "json": {
         "type": "rtcConfiguration",
         "rtcConfiguration": {
@@ -77,6 +54,6 @@
     }
   ],
   "notes": [
-    "Which of the two it is depends only on arrival order: the first rtcConfiguration after the request is the reply; any later one is a refresh."
+    "Which of the two it is depends on the connection phase, not on the content: the first rtcConfiguration after requestRtcConfiguration is the initial reply. Once the peer connection and the general message handler exist (happy_path step 6) any further rtcConfiguration is a refresh. A refresh can therefore never be handled before that point."
   ]
 }

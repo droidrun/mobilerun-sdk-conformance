@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { replay, EVENTS, type Scenario } from '../src/reconnect';
+import { EVENTS, makeHarness, observe, type Scenario } from '../src/reconnect';
 
 const dir = join(import.meta.dir, '../../fixtures/reconnect');
 const policy = JSON.parse(readFileSync(join(dir, 'policy.json'), 'utf8'));
@@ -9,6 +9,35 @@ const { events, scenarios } = JSON.parse(readFileSync(join(dir, 'scenarios.json'
   events: string[];
   scenarios: Scenario[];
 };
+
+/** Replays a scenario as documented in the README. Returns the first mismatch or null. */
+function replay(sc: Scenario): string | null {
+  const h = makeHarness(sc.random);
+  let i = 0;
+  const check = () => {
+    const wants = sc.expect.filter((e) => e.after_steps === i).sort((a, b) => a.at_ms - b.at_ms);
+    for (const e of wants) {
+      h.schedule.advanceTo(e.at_ms);
+      const got: Record<string, unknown> = observe(h);
+      if (e.defer_target_change !== undefined) got.defer_target_change = h.controller.shouldDeferTargetChange();
+      if (e.pending_timers !== undefined) got.pending_timers = h.schedule.pendingCount;
+      const { at_ms: _a, after_steps: _s, ...want } = e;
+      if (!Bun.deepEquals(got, want)) {
+        return `expect at ${e.at_ms}ms after ${i} steps: want ${JSON.stringify(want)} got ${JSON.stringify(got)}`;
+      }
+    }
+    return null;
+  };
+  for (;;) {
+    const bad = check();
+    if (bad) return bad;
+    if (i >= sc.steps.length) return null;
+    const st = sc.steps[i]!;
+    h.schedule.advanceTo(st.at_ms);
+    h.apply(st.event);
+    i += 1;
+  }
+}
 
 describe('reconnect fixtures', () => {
   test('policy invariants hold', () => {

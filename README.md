@@ -23,7 +23,7 @@ fixtures/
 generator/                    Bun + TypeScript generator and self-tests
 ```
 
-All JSON is flat and language-neutral. 64-bit integers appear as decimal strings, bytes as lowercase hex.
+All JSON is language-neutral. Integers, including the 64-bit `pointerId`, are JSON numbers within ±2^53; bytes are lowercase hex. Control and policy files are flat; the signalling and `sequence.json` files are nested. Key casing: snake_case except names taken from React or the wire (control args, signalling fields, data-channel options).
 
 ## Consuming from an SDK
 
@@ -31,7 +31,7 @@ Pin a git tag of this repository (for example `v0.1.0`) as a submodule, a pinned
 
 ### Control fixtures
 
-Each case is `{ "name", "args", "hex" }`. `args` are the named arguments of the React builder, with defaults made explicit. Encoding `args` with your SDK must produce exactly `hex`. Decoding is the inverse where the format is lossless (see the notes below).
+Each file is `{ "cases": [ ... ] }` and each case is `{ "name", "args", "hex" }`. `args` are the named arguments of the React builder, with defaults made explicit. Encoding `args` with your SDK must produce exactly `hex`. Decoding is the inverse where the format is lossless (see the notes below).
 
 Wire layouts (offsets in bytes; `LE` little-endian, `BE` big-endian):
 
@@ -55,19 +55,19 @@ Notes that every port must match:
 
 ### Signalling fixtures
 
-Each `client-*`/`server-*` file has `type`, `direction`, a `fields` table (`name`, `type`, `required`), `examples` and `notes`. `sequence.json` lists the ordered exchanges (`happy_path`, `refresh`), the timings, the two negotiated data channels (control id 1 ordered and reliable, hover id 2 unordered with `maxRetransmits: 0`), the failure triggers and what is ignored.
+Each `client-*`/`server-*` file is `{ type, direction, description, fields[]{name, type, required, notes?}, examples[]{name, json}, notes?[] }`. `sequence.json` lists the ordered exchanges (`happy_path`, `refresh`), the timings, the two negotiated data channels (control id 1 ordered and reliable, hover id 2 unordered with `maxRetransmits: 0`), the failure triggers and what is ignored.
 
 ### Reconnect fixtures
 
 `policy.json` holds the constants and a table of `delay_cases` (`attempt`, `random`, `delay_ms`).
 
-`scenarios.json` holds `scenarios`, each `{ name, random, steps, expect }`:
+`scenarios.json` is `{ events, scenarios }` (`events` lists the event vocabulary); each scenario is `{ name, random, steps, expect }`:
 
 - `random` is the constant the jitter source returns (0.5 means no jitter).
 - `steps[]` is `{ at_ms, event }` on a fake clock. Events: `attempt_mounted`, `connected`, `disconnected`, `failure`, `wake`, `retry`, `disable`, `dispose`. They map to the controller methods `attemptMounted`, `handleConnected`, `handleDisconnected`, `handleFailure`, `handleWake`, `retry`, `setDisabled`, `dispose`.
 - `expect[]` is `{ at_ms, after_steps, status, attempt, heal_calls, remount_calls }`, plus optionally `defer_target_change` (the value of `shouldDeferTargetChange()`) and `pending_timers` (number of timers still scheduled).
 
-Replay algorithm, with a fake clock starting at 0 that fires due timers in due-time order, and `i = 0`:
+Replay algorithm, with a fake clock starting at 0 that fires due timers in due-time order (timers due at the same time fire in the order they were scheduled), and `i = 0`:
 
 1. Evaluate every expectation with `after_steps == i`, in ascending `at_ms`: advance the clock to `at_ms`, then compare.
 2. If steps remain: advance the clock to `steps[i].at_ms`, apply the event, `i += 1`, go to 1.

@@ -15,7 +15,7 @@ export function decodeControl(kind: string, hex: string): Args {
   const type = v.getUint8(0);
   switch (kind) {
     case 'touch': {
-      expect(type, 2, v.byteLength, 32);
+      checkHeader(type, 2, v.byteLength, 32);
       return {
         action: v.getUint8(1),
         pointerId: Number(v.getBigInt64(2, false)), // big-endian, as React writes it
@@ -29,7 +29,7 @@ export function decodeControl(kind: string, hex: string): Args {
       };
     }
     case 'scroll': {
-      expect(type, 3, v.byteLength, 21);
+      checkHeader(type, 3, v.byteLength, 21);
       return {
         x: v.getInt32(1, true),
         y: v.getInt32(5, true),
@@ -41,7 +41,7 @@ export function decodeControl(kind: string, hex: string): Args {
       };
     }
     case 'hover': {
-      expect(type, 21, v.byteLength, 17);
+      checkHeader(type, 21, v.byteLength, 17);
       return {
         x: v.getInt32(1, true),
         y: v.getInt32(5, true),
@@ -51,7 +51,7 @@ export function decodeControl(kind: string, hex: string): Args {
       };
     }
     case 'keycode': {
-      expect(type, 0, v.byteLength, 14);
+      checkHeader(type, 0, v.byteLength, 14);
       return {
         action: v.getUint8(1),
         keycode: v.getInt32(2, true),
@@ -77,7 +77,7 @@ export function decodeControl(kind: string, hex: string): Args {
   throw new Error(`unknown kind ${kind}`);
 }
 
-function expect(type: number, wantType: number, len: number, wantLen: number) {
+function checkHeader(type: number, wantType: number, len: number, wantLen: number) {
   if (type !== wantType) throw new Error(`type ${type} != ${wantType}`);
   if (len !== wantLen) throw new Error(`length ${len} != ${wantLen}`);
 }

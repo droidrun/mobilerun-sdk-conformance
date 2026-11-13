@@ -51,7 +51,7 @@
     {
       "n": 2,
       "actor": "client",
-      "action": "start keepAlive timer (first tick 10 s after mount), paused while the page is hidden",
+      "action": "start keepAlive timer (first tick 10000 ms after mount), paused while the page is hidden",
       "message": null,
       "notes": "timer is armed at mount, not after the control channel opens; ticks are skipped unless the socket is open"
     },
@@ -115,7 +115,7 @@
     {
       "n": 12,
       "actor": "client",
-      "action": "control data channel opens: send requestFrame 12 times, at +0, +125, ... +1375 ms",
+      "action": "control data channel opens: send requestFrame 12 times, 125 ms apart (+0, +125, ... +1375 ms)",
       "message": "client-request-frame"
     },
     {
@@ -141,7 +141,7 @@
     {
       "n": 1,
       "actor": "server",
-      "action": "send unsolicited credential refresh (any time after step 3 of the happy path)",
+      "action": "send unsolicited credential refresh (only effective once happy_path step 6 is done: before that the next rtcConfiguration is the initial reply)",
       "message": "server-rtc-configuration"
     },
     {
@@ -191,14 +191,14 @@
   ],
   "failure_triggers": [
     "WebSocket fails to open in time or closes before open",
-    "rtcConfiguration reply missing after the timeout, or the handler throws",
+    "rtcConfiguration reply missing after the timeout, or a message received while awaiting it is not valid JSON",
     "offer creation / negotiation setup throws",
     "WebSocket closes while the peer connection state is not \"connected\"",
     "peer connection state becomes \"failed\" or \"closed\""
   ],
   "ignored": [
-    "Messages that are not valid JSON are dropped.",
-    "Messages with an unknown type are dropped.",
+    "Per connection phase. While awaiting the initial rtcConfiguration (happy_path steps 3-4): a message that is not valid JSON fails startup (a failure, see failure_triggers); valid messages of any other type are ignored.",
+    "After the general message handler is attached (happy_path step 6 onward): messages that are not valid JSON are dropped, and so are messages with an unknown type.",
     "answer or candidate while there is no peer connection is dropped."
   ]
 }

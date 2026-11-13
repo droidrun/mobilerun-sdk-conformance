@@ -7,10 +7,12 @@ import {
   STREAM_CONNECT_TIMEOUT_MS as WATCHDOG,
   STREAM_RECONNECT_MAX_ATTEMPTS as MAX,
   STREAM_RECONNECT_STABILITY_MS as STABILITY,
+  streamReconnectDelayMs,
 } from '../vendor/stream-reconnect';
-import { makeHarness, observe, type EventName, type Expect, type Scenario } from './reconnect';
+import { NO_JITTER, makeHarness, observe, type EventName, type Expect, type Scenario } from './reconnect';
 
-const DELAYS = [1000, 2000, 4000, 8000, 16000, 30000];
+// Backoff delay for the given attempt, without jitter (the function caps at 30 s).
+const delay = (attempt: number) => streamReconnectDelayMs(attempt, () => NO_JITTER);
 
 type Want = Partial<{
   status: string;
@@ -22,10 +24,10 @@ type Want = Partial<{
 }>;
 
 class Rec {
-  private h = makeHarness(0.5);
+  private h = makeHarness(NO_JITTER);
   private sc: Scenario;
   constructor(name: string) {
-    this.sc = { name, random: 0.5, steps: [], expect: [] };
+    this.sc = { name, random: NO_JITTER, steps: [], expect: [] };
   }
   get now() {
     return this.h.schedule.now;
@@ -73,11 +75,10 @@ function scenario(name: string, fn: (r: Rec) => void): Scenario {
 }
 
 // Drives the controller to 'unavailable' the way the original tests do.
-function exhaust(r: Rec, firstFailureAlreadyMounted = true) {
-  void firstFailureAlreadyMounted;
-  for (let i = 0; i <= MAX; i++) {
+function exhaust(r: Rec, from = 0) {
+  for (let i = from; i <= MAX; i++) {
     r.do('failure');
-    r.advance(DELAYS[Math.min(i, DELAYS.length - 1)]!);
+    r.advance(delay(i + 1));
     if (i < MAX) r.do('attempt_mounted');
   }
 }
@@ -91,7 +92,7 @@ export function buildScenarios(): Scenario[] {
     r.expect({ status: 'connecting', attempt: 0 });
     r.advance(WATCHDOG);
     r.expect({ status: 'reconnecting', attempt: 1, heals: 1, remounts: 0 });
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.expect({ remounts: 1, status: 'reconnecting', attempt: 1 });
   });
 
@@ -100,7 +101,7 @@ export function buildScenarios(): Scenario[] {
     r.advance(100);
     r.do('failure');
     r.expect({ status: 'reconnecting', attempt: 1 });
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.expect({ remounts: 1 });
   });
 
@@ -109,7 +110,7 @@ export function buildScenarios(): Scenario[] {
     for (let i = 0; i < MAX; i++) {
       r.do('failure');
       r.expect({ status: 'reconnecting', attempt: i + 1 });
-      r.advance(DELAYS[i]! - 1);
+      r.advance(delay(i + 1) - 1);
       r.expect({ remounts: i });
       r.advance(1);
       r.expect({ remounts: i + 1 });
@@ -142,17 +143,17 @@ export function buildScenarios(): Scenario[] {
     r.expect({ status: 'connected', attempt: 0 });
     r.do('disconnected');
     r.expect({ status: 'reconnecting', attempt: 1 });
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.expect({ remounts: 1 });
   });
 
   add('disconnect handling › a stable connection refills the retry budget', (r) => {
     r.do('attempt_mounted');
     r.do('failure');
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.do('attempt_mounted');
     r.do('failure');
-    r.advance(DELAYS[1]!);
+    r.advance(delay(2));
     r.do('attempt_mounted');
     r.do('connected');
     r.expect({ status: 'connected', attempt: 2 });
@@ -165,7 +166,7 @@ export function buildScenarios(): Scenario[] {
   add('disconnect handling › a quick drop before stability keeps escalating', (r) => {
     r.do('attempt_mounted');
     r.do('failure');
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.do('attempt_mounted');
     r.do('connected');
     r.advance(1000);
@@ -234,13 +235,9 @@ export function buildScenarios(): Scenario[] {
     r.do('attempt_mounted');
     r.do('failure');
     r.expect({ defer: true });
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.do('attempt_mounted');
-    for (let i = 1; i <= MAX; i++) {
-      r.do('failure');
-      r.advance(DELAYS[Math.min(i, DELAYS.length - 1)]!);
-      if (i < MAX) r.do('attempt_mounted');
-    }
+    exhaust(r, 1);
     r.expect({ status: 'unavailable', defer: true });
   });
 
@@ -248,7 +245,7 @@ export function buildScenarios(): Scenario[] {
     r.do('attempt_mounted');
     r.do('failure');
     r.expect({ defer: true });
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.do('attempt_mounted');
     r.expect({ defer: false, status: 'reconnecting', attempt: 1 });
   });
@@ -292,7 +289,7 @@ export function buildScenarios(): Scenario[] {
     r.do('connected');
     r.do('disconnected');
     r.do('attempt_mounted');
-    r.advance(DELAYS[0]! - 1);
+    r.advance(delay(1) - 1);
     r.expect({ remounts: 0 });
     r.advance(1);
     r.expect({ remounts: 1 });
@@ -302,18 +299,18 @@ export function buildScenarios(): Scenario[] {
     r.do('attempt_mounted');
     r.do('failure');
     r.expect({ heals: 1 });
-    r.advance(DELAYS[0]!);
+    r.advance(delay(1));
     r.do('attempt_mounted');
     r.do('failure');
     r.expect({ heals: 1 });
-    r.advance(DELAYS[1]!);
+    r.advance(delay(2));
     r.do('attempt_mounted');
     r.do('connected');
     r.advance(STABILITY);
     r.do('disconnected');
     r.expect({ heals: 2 });
     for (let i = 1; i < MAX + 1; i++) {
-      r.advance(DELAYS[Math.min(i, DELAYS.length - 1)]!);
+      r.advance(delay(i + 1));
       r.do('attempt_mounted');
       r.do('failure');
     }

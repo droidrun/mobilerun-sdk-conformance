@@ -1,7 +1,7 @@
 {
   "type": "keepAlive",
   "direction": "client_to_server",
-  "description": "Sent every 10 s while the page is visible and the socket is open.",
+  "description": "Sent every 10000 ms while the page is visible and the socket is open.",
   "fields": [
     {
       "name": "type",
