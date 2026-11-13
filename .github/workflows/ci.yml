@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - run: bun install --frozen-lockfile
+      - run: bun run generate
+      - name: Fixtures are up to date
+        run: git add --intent-to-add ../fixtures && git diff --exit-code ../fixtures
+      - name: Vendored controller matches the README checksum
+        working-directory: .
+        run: echo "$(grep -o 'SHA-256 `[0-9a-f]\{64\}' README.md | grep -o '[0-9a-f]\{64\}')  generator/vendor/stream-reconnect.ts" | shasum -a 256 -c
+      - name: Round-trip self-test
+        run: bun test
+      - run: bunx tsc --noEmit
