@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - run: bun install --frozen-lockfile
+      - run: bun run generate
+      - name: Fixtures are up to date
+        run: git diff --exit-code ../fixtures
+      - name: Untracked fixtures
+        run: test -z "$(git status --porcelain ../fixtures)"
+      - name: Round-trip self-test
+        run: bun test
+      - run: bunx tsc --noEmit
