@@ -1,0 +1,16 @@
+{
+  "name": "mobilerun-sdk-conformance-generator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "bun run src/generate.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@mobilerun/react": "0.2.1"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.3",
+    "typescript": "6.0.3"
+  }
+}
