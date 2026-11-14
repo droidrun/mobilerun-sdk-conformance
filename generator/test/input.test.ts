@@ -10,6 +10,18 @@ import { mapPoint, routeIme, routePointers, type Message } from '../src/input';
 const createElement: (component: () => null) => unknown = require('react').createElement;
 const renderToString: (element: unknown) => string = require('react-dom/server').renderToString;
 const fixtures = buildInputFixtures();
+// Explicit expected SDK divergences; every other case must match the published hook.
+const sdkFallbacks: Record<string, { keycode: number; metaState: number }> = {
+  'dead key mapped fallback': { keycode: 75, metaState: 0 },
+  'emoji utf16 fallback': { keycode: 29, metaState: 0 },
+  'empty key fallback': { keycode: 29, metaState: 0 },
+  'combining text fallback': { keycode: 33, metaState: 0 },
+  'context menu fallback': { keycode: 82, metaState: 0 },
+  'numpad no text fallback': { keycode: 145, metaState: 0 },
+  'numpad decimal no text fallback': { keycode: 158, metaState: 0 },
+  'alt no char fallback': { keycode: 29, metaState: 2 },
+  'alt caps no char fallback': { keycode: 31, metaState: 3 },
+};
 const kindByType: Record<number, string> = { 0: 'keycode', 1: 'text', 2: 'touch', 3: 'scroll', 9: 'set-clipboard', 21: 'hover' };
 function decode(m: Message): { kind: string } & Args {
   const kind = kindByType[parseInt(m.hex.slice(0, 2), 16)]!;
@@ -43,7 +55,7 @@ describe('input fixtures', () => {
     });
   }
 
-  test('all keyboard cases match the actual React hook', async () => {
+  test('keyboard cases match React except the explicit SDK fallback keyup release', async () => {
     const previous = ['window', 'document', 'navigator'].map((key) =>
       [key, Object.getOwnPropertyDescriptor(globalThis, key)] as const);
     let clipboard = '';
@@ -75,12 +87,29 @@ describe('input fixtures', () => {
           preventDefault() {}, stopPropagation() {}, target: { tagName: 'VIDEO' },
         } as Parameters<typeof handlers.handleKeyboard>[0]);
         await Promise.resolve(); // Clipboard read resolves before comparing the complete output.
-        expect(sent, c.name).toEqual(c.expect);
+        const fallback = sdkFallbacks[c.name.replace(/ (keydown|keyup)$/, '')];
+        if (c.type === 'keyup' && fallback) {
+          expect(sent, c.name).toEqual([]); // React's bug: fallback keydown has no corresponding up.
+          expect(c.expect.map(decode), c.name).toEqual([
+            { kind: 'keycode', action: 1, repeat: 0, ...fallback },
+          ]);
+        } else expect(sent, c.name).toEqual(c.expect);
       }
     } finally {
       for (const [key, descriptor] of previous) {
         if (descriptor) Object.defineProperty(globalThis, key, descriptor);
         else Reflect.deleteProperty(globalThis, key);
+      }
+    }
+  });
+
+  test('SDK nontext fallbacks have balanced DOWN and UP with normalized metadata', () => {
+    for (const [name, fallback] of Object.entries(sdkFallbacks)) {
+      for (const [type, action] of [['keydown', 0], ['keyup', 1]] as const) {
+        const c = fixtures.keys.cases.find((c) => c.name === `${name} ${type}`)!;
+        expect(c.expect.map(decode), c.name).toEqual([
+          { kind: 'keycode', action, repeat: 0, ...fallback },
+        ]);
       }
     }
   });

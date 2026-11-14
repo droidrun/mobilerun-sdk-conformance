@@ -90,11 +90,11 @@ None. Every case is expressible as data. The two delay-function tests are in `po
 
 Each file in `input/` is `{ "cases": [ ... ] }`. Cases have a unique `name`, the input fields below, and `expect`. Except for geometry, `expect` is an ordered list of `{ "channel": "control" | "hover", "hex": "..." }`; an empty list means no message. Replay each case independently with fresh state, collecting messages in send order and comparing channel and bytes exactly. All channels are open, the video is focused and available, and clipboard reads succeed. These vectors specify routing, not DOM focus, channel availability, frame coalescing or operating-system event translation.
 
-The reference in `generator/src/input.ts` calls the real encoders and constants from the pinned `@mobilerun/react` package; it does not encode bytes itself. Keyboard routing follows `src/hooks/use-scrcpy-input.ts` at React commit `68098f4bb8df0e6af5bc10a093a77b1e63a7423b`, whose hook source matches the published `0.2.1` source map. Self-tests compare every keyboard case with the actual published hook, and independently decode and re-encode all generated input messages.
+The reference in `generator/src/input.ts` calls the real encoders and constants from the pinned `@mobilerun/react` package; it does not encode bytes itself. Keyboard routing follows `src/hooks/use-scrcpy-input.ts` at React commit `68098f4bb8df0e6af5bc10a093a77b1e63a7423b`, whose hook source matches the published `0.2.1` source map, except for the SDK fallback release described below. Self-tests compare keyboard cases with the actual published hook, assert that explicit divergence, and independently decode and re-encode all generated input messages.
 
 | File | Case inputs | Replay rule and source |
 |---|---|---|
-| `keys.json` | `type` (`keydown`/`keyup`), `code`, `key`, `shift`, `alt`, `ctrl`, `meta`, `caps_lock`, `clipboard` | Pass one event through React's keyboard routing. Flags are booleans; `key` is the produced browser key value and `code` is its physical code. Each case is independent, including keyup cases. |
+| `keys.json` | `type` (`keydown`/`keyup`), `code`, `key`, `shift`, `alt`, `ctrl`, `meta`, `caps_lock`, `clipboard` | Pass one event through React's keyboard routing with the SDK fallback-release exception below. Flags are booleans; `key` is the produced browser key value and `code` is its physical code. Each case is independent, including keyup cases. |
 | `ime.json` | `operation`, `text` | Apply one SDK operation: `commit`, `delete`, `composition_update`, or `composition_end`, as described below. |
 | `pointers.json` | `video_width`, `video_height`, `events[]` | Start with no active pointers; replay events in array order, concatenate all emitted messages, then compare with `expect`. Each event has `type` (`down`/`move`/`up`/`cancel`), `id`, `x`, `y`, `mouse`, `buttons`. Positions are already in upright video pixels. |
 | `geometry.json` | `view_width`, `view_height`, `video_width`, `video_height`, `rotation`, `x`, `y` | Map the view-local point to upright video pixels. `expect` is `{ "x", "y" }` or `null`; no wire message is emitted. Compare coordinates with absolute tolerance `1e-6` pixels. |
@@ -106,13 +106,15 @@ Keyboard shortcut handling has first priority on keydown: Ctrl/Cmd+V sends one S
 
 Next, React tests `key` for named control/navigation keys, modifier prefixes, arrow prefixes, its `F` prefix heuristic (length at most three UTF-16 code units), or a held Ctrl/Meta flag. These use `codeMap` and emit keycode down/up when mapped. The heuristic also classifies the single uppercase `F` as a control key; F13–F24 are unmapped in the current `codeMap` and emit nothing. Browser NumpadEnter uses `code = "NumpadEnter"`, `key = "Enter"`.
 
-For remaining keys, keydown with `key.length === 1` (UTF-16 code units) sends INJECT_TEXT, including control characters and unknown physical codes. It emits nothing on keyup. Other keydown values use a mapped keycode DOWN fallback; their keyup emits nothing. An unmapped code emits nothing when it reaches the keycode path. A non-BMP emoji occupies two UTF-16 code units and therefore takes the fallback, as the vectors demonstrate.
+For remaining keys, keydown with `key.length === 1` (UTF-16 code units) sends INJECT_TEXT, including control characters and unknown physical codes. It emits nothing on keyup. Other keydown values use a mapped keycode DOWN fallback. React omits the corresponding fallback keyup; the SDK decision below deliberately fixes that behavior. An unmapped code emits nothing when it reaches the keycode path. A non-BMP emoji occupies two UTF-16 code units and therefore takes the fallback, as the vectors demonstrate.
 
 Keycode metadata contains only SHIFT `1`, ALT `2`, CTRL `4096` and META `65536`. For letter codes `KeyA`–`KeyZ`, effective shift is physical shift XOR CapsLock. CapsLock does not toggle shift for nonletters. Repeat is always zero.
 
 React also supplies the scroll tick-to-i16 fixed-point rule (ticks/16, clamp, round, saturate), the binary encoders, and the pointer rules that ignore outside movement and release UP/CANCEL at the last in-video position. All pointer messages use pressure `1` and PRIMARY for both action button and buttons, including UP/CANCEL, matching the React touch builder calls.
 
 ### SDK decisions
+
+**React divergence — fallback key release.** A mapped key that reaches React's noncontrol fallback branch emits INJECT_KEYCODE DOWN on keydown **and UP on keyup**, with the same metadata normalization as control keys. The predicate is: no control-key match, no Ctrl/Meta combo, and `key.length !== 1` in UTF-16 code units. This covers ContextMenu, numpad keys without text (for example with NumLock off), dead keys, and Alt+letter without a character. It also applies when React treats a multi-code-unit value as a fallback. React currently emits only DOWN and can leave these keys pressed. This is an SDK decision; ordinary single-code-unit text keyups still emit nothing, and unmapped fallback codes remain ignored.
 
 React has no IME commit API. `commit` splits text at LF, CR, CRLF and TAB: printable text runs use INJECT_TEXT, CRLF counts as one ENTER down/up, standalone CR/LF use ENTER down/up, and TAB uses TAB down/up. Other C0 controls (`U+0000`–`U+001F`), DEL and C1 controls (`U+007F`–`U+009F`) are dropped and do not break a remaining text run. Unicode outside those ranges is preserved. `delete` uses `text` as the local buffer: only an empty buffer emits DEL down/up. Composition updates remain local; `composition_end` sends the nonempty finalized string as one INJECT_TEXT without splitting. Empty operations emit nothing. Synthetic presses have repeat and metadata zero.
 
@@ -146,6 +148,7 @@ Semantic version tags (`v0.1.0` after the first merge). A change that alters any
 
 - Added language-neutral input vectors for keyboard routing, modifiers, IME commits, touch slots, mouse/hover, letterbox geometry and scroll ticks.
 - Documented React routing parity separately from SDK decisions; added published-hook parity and input-message round-trip self-tests.
+- Release mapped noncontrol fallback keys on keyup as an explicit SDK divergence from React's missing release.
 - Existing control, signalling and reconnect fixture files are unchanged.
 
 ### v0.1.1

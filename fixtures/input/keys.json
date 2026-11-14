@@ -639,7 +639,12 @@
       "meta": false,
       "caps_lock": false,
       "clipboard": "",
-      "expect": []
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00014b0000000000000000000000"
+        }
+      ]
     },
     {
       "name": "dead key unknown fallback keydown",
@@ -696,7 +701,12 @@
       "meta": false,
       "caps_lock": false,
       "clipboard": "",
-      "expect": []
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011d0000000000000000000000"
+        }
+      ]
     },
     {
       "name": "emoji unknown fallback keydown",
@@ -753,7 +763,12 @@
       "meta": false,
       "caps_lock": false,
       "clipboard": "",
-      "expect": []
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011d0000000000000000000000"
+        }
+      ]
     },
     {
       "name": "combining text fallback keydown",
@@ -784,7 +799,12 @@
       "meta": false,
       "caps_lock": false,
       "clipboard": "",
-      "expect": []
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001210000000000000000000000"
+        }
+      ]
     },
     {
       "name": "caps lock fallback keydown",
@@ -841,7 +861,156 @@
       "meta": false,
       "caps_lock": false,
       "clipboard": "",
-      "expect": []
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001520000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "numpad no text fallback keydown",
+      "type": "keydown",
+      "code": "Numpad1",
+      "key": "Unidentified",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000910000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "numpad no text fallback keyup",
+      "type": "keyup",
+      "code": "Numpad1",
+      "key": "Unidentified",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001910000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "numpad decimal no text fallback keydown",
+      "type": "keydown",
+      "code": "NumpadDecimal",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00009e0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "numpad decimal no text fallback keyup",
+      "type": "keyup",
+      "code": "NumpadDecimal",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00019e0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "alt no char fallback keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001d0000000000000002000000"
+        }
+      ]
+    },
+    {
+      "name": "alt no char fallback keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011d0000000000000002000000"
+        }
+      ]
+    },
+    {
+      "name": "alt caps no char fallback keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003000000"
+        }
+      ]
+    },
+    {
+      "name": "alt caps no char fallback keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003000000"
+        }
+      ]
     },
     {
       "name": "backspace keydown",

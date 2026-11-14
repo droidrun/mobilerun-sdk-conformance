@@ -18,7 +18,7 @@ export type KeyEvent = {
   caps_lock: boolean; clipboard: string;
 };
 
-/** Routing from use-scrcpy-input.ts; focus and open control channel are preconditions. */
+/** React routing, with SDK fallback keyup release; focus and open channel are preconditions. */
 export function routeKey(e: KeyEvent): Message[] {
   if (e.type === 'keydown' && (e.ctrl || e.meta)) {
     if (e.key.toLowerCase() === 'v') {
@@ -31,11 +31,12 @@ export function routeKey(e: KeyEvent): Message[] {
     e.key.startsWith('Arrow') || (e.key.startsWith('F') && e.key.length <= 3) ||
     ['Shift', 'Control', 'Alt', 'Meta'].some((prefix) => e.key.startsWith(prefix)) ||
     e.ctrl || e.meta;
-  if (!control && e.type === 'keydown' && e.key.length === 1) {
-    return [message(createInjectTextMessage(e.key))];
+  if (!control && e.key.length === 1) {
+    return e.type === 'keydown' ? [message(createInjectTextMessage(e.key))] : [];
   }
   const keycode = codeMap[e.code];
-  if (!keycode || (!control && e.type === 'keyup')) return [];
+  if (!keycode) return [];
+  // SDK decision / React divergence: release mapped nontext fallback keys on keyup.
   const letter = e.code >= 'KeyA' && e.code <= 'KeyZ';
   const shift = letter ? e.shift !== e.caps_lock : e.shift;
   const meta = (shift ? K.META_SHIFT_ON : 0) | (e.alt ? K.META_ALT_ON : 0) |

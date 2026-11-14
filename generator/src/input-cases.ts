@@ -28,6 +28,10 @@ const keys = [
   ...key('combining text fallback', 'KeyE', 'e\u0301'),
   ...key('caps lock fallback', 'CapsLock', 'CapsLock'),
   ...key('context menu fallback', 'ContextMenu', 'ContextMenu'),
+  ...key('numpad no text fallback', 'Numpad1', 'Unidentified'),
+  ...key('numpad decimal no text fallback', 'NumpadDecimal', ''),
+  ...key('alt no char fallback', 'KeyA', '', { alt: true }),
+  ...key('alt caps no char fallback', 'KeyC', '', { alt: true, caps_lock: true }),
   ...['Backspace', 'Delete', 'Enter', 'Tab', 'Escape', 'Home', 'End', 'PageUp', 'PageDown',
     'Insert', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
     .flatMap((code) => key(code.toLowerCase(), code, code)),
