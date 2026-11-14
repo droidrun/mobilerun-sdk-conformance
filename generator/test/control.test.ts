@@ -2,7 +2,8 @@ import { describe, expect, test } from 'bun:test';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { decodeControl, expectedWire } from '../src/decode';
-import { BUILDERS, toHex, type ControlCase } from '../src/control-cases';
+import { BUILDERS, type ControlCase } from '../src/control-cases';
+import { toHex } from '../src/hex';
 
 const dir = join(import.meta.dir, '../../fixtures/control');
 const kinds = readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => f.replace('.json', ''));

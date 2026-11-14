@@ -226,12 +226,12 @@
     },
     {
       "name": "buttons and bounds",
+      "h": 0,
+      "v": 1,
       "video_width": 2400,
       "video_height": 1080,
       "x": 2400,
       "y": 1080,
-      "h": 0,
-      "v": 1,
       "buttons": 3,
       "expect": [
         {
@@ -239,6 +239,77 @@
           "hex": "036009000038040000600938040000000803000000"
         }
       ]
+    },
+    {
+      "name": "origin inclusive",
+      "h": 0,
+      "v": 1,
+      "video_width": 1080,
+      "video_height": 2400,
+      "x": 0,
+      "y": 0,
+      "buttons": 0,
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "030000000000000000380460090000000800000000"
+        }
+      ]
+    },
+    {
+      "name": "outside left",
+      "h": 0,
+      "v": 1,
+      "video_width": 1080,
+      "video_height": 2400,
+      "x": -1,
+      "y": 20.49,
+      "buttons": 0,
+      "expect": []
+    },
+    {
+      "name": "outside right",
+      "h": 0,
+      "v": 1,
+      "video_width": 1080,
+      "video_height": 2400,
+      "x": 1081,
+      "y": 20.49,
+      "buttons": 0,
+      "expect": []
+    },
+    {
+      "name": "outside top",
+      "h": 0,
+      "v": 1,
+      "video_width": 1080,
+      "video_height": 2400,
+      "x": 10.5,
+      "y": -1,
+      "buttons": 0,
+      "expect": []
+    },
+    {
+      "name": "outside bottom",
+      "h": 0,
+      "v": 1,
+      "video_width": 1080,
+      "video_height": 2400,
+      "x": 10.5,
+      "y": 2401,
+      "buttons": 0,
+      "expect": []
+    },
+    {
+      "name": "video not ready",
+      "h": 0,
+      "v": 1,
+      "video_width": 0,
+      "video_height": 0,
+      "x": 0,
+      "y": 0,
+      "buttons": 0,
+      "expect": []
     }
   ]
 }

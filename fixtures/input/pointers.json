@@ -11,6 +11,7 @@
           "x": 100,
           "y": 200,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -19,6 +20,7 @@
           "x": 110,
           "y": 220,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -27,6 +29,7 @@
           "x": 900,
           "y": 900,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -56,6 +59,7 @@
           "x": 100,
           "y": 200,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -64,6 +68,7 @@
           "x": 300,
           "y": 400,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -72,6 +77,7 @@
           "x": 120,
           "y": 220,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -80,6 +86,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -88,6 +95,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -125,6 +133,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -133,6 +142,7 @@
           "x": 30,
           "y": 40,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -141,6 +151,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -149,6 +160,7 @@
           "x": 50,
           "y": 60,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -157,6 +169,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -165,6 +178,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -206,6 +220,7 @@
           "x": -1,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -214,6 +229,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -222,6 +238,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -238,6 +255,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -246,6 +264,7 @@
           "x": 20,
           "y": 30,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -254,6 +273,7 @@
           "x": 1081,
           "y": 30,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -262,6 +282,7 @@
           "x": 1081,
           "y": 30,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -291,6 +312,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -299,6 +321,7 @@
           "x": 20,
           "y": 30,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -307,6 +330,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -315,6 +339,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -344,6 +369,7 @@
           "x": 10,
           "y": 20,
           "mouse": true,
+          "button": 0,
           "buttons": 2
         },
         {
@@ -352,6 +378,7 @@
           "x": 10,
           "y": 20,
           "mouse": true,
+          "button": 0,
           "buttons": 1
         },
         {
@@ -360,6 +387,7 @@
           "x": 30,
           "y": 40,
           "mouse": true,
+          "button": 0,
           "buttons": 1
         },
         {
@@ -368,6 +396,7 @@
           "x": 900,
           "y": 900,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -376,6 +405,7 @@
           "x": 50,
           "y": 60,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -413,6 +443,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -421,6 +452,7 @@
           "x": 30,
           "y": 40,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -429,6 +461,7 @@
           "x": 0,
           "y": 0,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -437,6 +470,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -470,6 +504,7 @@
           "x": -1,
           "y": 0,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -478,6 +513,7 @@
           "x": 1081,
           "y": 0,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -486,6 +522,7 @@
           "x": 1080,
           "y": 2400,
           "mouse": true,
+          "button": 0,
           "buttons": 6
         }
       ],
@@ -507,6 +544,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -515,6 +553,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -523,6 +562,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -539,6 +579,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -547,6 +588,7 @@
           "x": 30,
           "y": 40,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -555,6 +597,7 @@
           "x": 30,
           "y": 40,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -580,6 +623,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -588,6 +632,7 @@
           "x": 2.5,
           "y": 3.49,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -596,6 +641,7 @@
           "x": 1080,
           "y": 2400,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -604,6 +650,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -637,6 +684,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -645,6 +693,7 @@
           "x": 10,
           "y": 20,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -653,6 +702,7 @@
           "x": 20,
           "y": 40,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -661,6 +711,7 @@
           "x": 30,
           "y": 60,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -669,6 +720,7 @@
           "x": 40,
           "y": 80,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -677,6 +729,7 @@
           "x": 50,
           "y": 100,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -685,6 +738,7 @@
           "x": 60,
           "y": 120,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -693,6 +747,7 @@
           "x": 70,
           "y": 140,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -701,6 +756,7 @@
           "x": 80,
           "y": 160,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -709,6 +765,7 @@
           "x": 90,
           "y": 180,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -717,6 +774,7 @@
           "x": 100,
           "y": 200,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -725,6 +783,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -733,6 +792,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -741,6 +801,7 @@
           "x": 80,
           "y": 90,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -749,6 +810,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -757,6 +819,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -765,6 +828,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -773,6 +837,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -781,6 +846,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -789,6 +855,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -797,6 +864,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -805,6 +873,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -813,6 +882,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -821,6 +891,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -829,6 +900,7 @@
           "x": -1,
           "y": -1,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         }
       ],
@@ -934,6 +1006,7 @@
           "x": 0,
           "y": 0,
           "mouse": false,
+          "button": 0,
           "buttons": 0
         },
         {
@@ -942,10 +1015,209 @@
           "x": 0,
           "y": 0,
           "mouse": true,
+          "button": 0,
           "buttons": 0
         }
       ],
       "expect": []
+    },
+    {
+      "name": "nonprimary button 1 hover only",
+      "video_width": 1080,
+      "video_height": 2400,
+      "events": [
+        {
+          "type": "down",
+          "id": 0,
+          "x": 10,
+          "y": 20,
+          "mouse": true,
+          "button": 1,
+          "buttons": 4
+        },
+        {
+          "type": "move",
+          "id": 0,
+          "x": 30,
+          "y": 40,
+          "mouse": true,
+          "button": 0,
+          "buttons": 4
+        },
+        {
+          "type": "up",
+          "id": 0,
+          "x": 50,
+          "y": 60,
+          "mouse": true,
+          "button": 1,
+          "buttons": 0
+        }
+      ],
+      "expect": [
+        {
+          "channel": "hover",
+          "hex": "151e000000280000003804600904000000"
+        }
+      ]
+    },
+    {
+      "name": "nonprimary button 2 hover only",
+      "video_width": 1080,
+      "video_height": 2400,
+      "events": [
+        {
+          "type": "down",
+          "id": 0,
+          "x": 10,
+          "y": 20,
+          "mouse": true,
+          "button": 2,
+          "buttons": 2
+        },
+        {
+          "type": "move",
+          "id": 0,
+          "x": 30,
+          "y": 40,
+          "mouse": true,
+          "button": 0,
+          "buttons": 2
+        },
+        {
+          "type": "up",
+          "id": 0,
+          "x": 50,
+          "y": 60,
+          "mouse": true,
+          "button": 2,
+          "buttons": 0
+        }
+      ],
+      "expect": [
+        {
+          "channel": "hover",
+          "hex": "151e000000280000003804600902000000"
+        }
+      ]
+    },
+    {
+      "name": "nonprimary up does not end primary gesture",
+      "video_width": 1080,
+      "video_height": 2400,
+      "events": [
+        {
+          "type": "down",
+          "id": 0,
+          "x": 10,
+          "y": 20,
+          "mouse": true,
+          "button": 0,
+          "buttons": 1
+        },
+        {
+          "type": "up",
+          "id": 0,
+          "x": 20,
+          "y": 30,
+          "mouse": true,
+          "button": 2,
+          "buttons": 1
+        },
+        {
+          "type": "move",
+          "id": 0,
+          "x": 30,
+          "y": 40,
+          "mouse": true,
+          "button": 0,
+          "buttons": 1
+        },
+        {
+          "type": "up",
+          "id": 0,
+          "x": 50,
+          "y": 60,
+          "mouse": true,
+          "button": 0,
+          "buttons": 0
+        }
+      ],
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0200ffffffffffffffff0a0000001400000038046009ffff0100000001000000"
+        },
+        {
+          "channel": "control",
+          "hex": "0202ffffffffffffffff1e0000002800000038046009ffff0100000001000000"
+        },
+        {
+          "channel": "control",
+          "hex": "0201ffffffffffffffff1e0000002800000038046009ffff0100000001000000"
+        }
+      ]
+    },
+    {
+      "name": "hover while touch slot active",
+      "video_width": 1080,
+      "video_height": 2400,
+      "events": [
+        {
+          "type": "down",
+          "id": 42,
+          "x": 10,
+          "y": 20,
+          "mouse": false,
+          "button": 0,
+          "buttons": 0
+        },
+        {
+          "type": "move",
+          "id": 999,
+          "x": 30,
+          "y": 40,
+          "mouse": true,
+          "button": 0,
+          "buttons": 6
+        },
+        {
+          "type": "move",
+          "id": 42,
+          "x": 50,
+          "y": 60,
+          "mouse": false,
+          "button": 0,
+          "buttons": 0
+        },
+        {
+          "type": "cancel",
+          "id": 42,
+          "x": 0,
+          "y": 0,
+          "mouse": false,
+          "button": 0,
+          "buttons": 0
+        }
+      ],
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "020000000000000000000a0000001400000038046009ffff0100000001000000"
+        },
+        {
+          "channel": "hover",
+          "hex": "151e000000280000003804600906000000"
+        },
+        {
+          "channel": "control",
+          "hex": "02020000000000000000320000003c00000038046009ffff0100000001000000"
+        },
+        {
+          "channel": "control",
+          "hex": "02030000000000000000320000003c00000038046009ffff0100000001000000"
+        }
+      ]
     }
   ]
 }

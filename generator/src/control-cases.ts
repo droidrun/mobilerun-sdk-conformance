@@ -8,6 +8,7 @@ import {
   createSetClipboardMessage,
   createTouchControlMessage,
 } from '@mobilerun/react';
+import { toHex } from './hex';
 
 export type Args = Record<string, number | string | boolean>;
 export interface ControlCase {
@@ -15,8 +16,6 @@ export interface ControlCase {
   args: Args;
   hex: string;
 }
-
-export const toHex = (buf: ArrayBuffer): string => Buffer.from(buf).toString('hex');
 
 type Builder = (a: any) => ArrayBuffer;
 

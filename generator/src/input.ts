@@ -4,7 +4,7 @@ import {
   createInjectScrollEventMessage, createInjectTextMessage,
   createSetClipboardMessage, createTouchControlMessage,
 } from '@mobilerun/react';
-import { toHex } from './control-cases';
+import { toHex } from './hex';
 
 export type Message = { channel: 'control' | 'hover'; hex: string };
 const message = (bytes: ArrayBuffer, channel: Message['channel'] = 'control'): Message =>
@@ -12,49 +12,74 @@ const message = (bytes: ArrayBuffer, channel: Message['channel'] = 'control'): M
 const press = (keycode: number): Message[] => [K.ACTION_DOWN, K.ACTION_UP].map((action) =>
   message(createInjectKeycodeMessage(action, keycode, 0, K.META_NONE)));
 
+const CONTROL_KEYS = new Set([
+  'Backspace', 'Delete', 'Enter', 'Tab', 'Escape', 'Home', 'End', 'PageUp', 'PageDown', 'Insert',
+]);
+const MODIFIER_PREFIXES = ['Shift', 'Control', 'Alt', 'Meta'];
+const GRAPHEMES = new Intl.Segmenter('und', { granularity: 'grapheme' });
+const MAX_TOUCH_SLOTS = 10;
+const MOUSE_POINTER_ID = -1;
+
 export type KeyEvent = {
   type: 'keydown' | 'keyup'; code: string; key: string;
   shift: boolean; alt: boolean; ctrl: boolean; meta: boolean;
   caps_lock: boolean; clipboard: string;
 };
+export type KeyDecision = 'tracked_key_release' | 'grapheme_text';
+export type KeySequence = { events: KeyEvent[]; sdk_decisions: KeyDecision[] };
 
-/** React routing, with SDK fallback keyup release; focus and open channel are preconditions. */
-export function routeKey(e: KeyEvent): Message[] {
-  if (e.type === 'keydown' && (e.ctrl || e.meta)) {
-    if (e.key.toLowerCase() === 'v') {
-      return e.clipboard ? [message(createSetClipboardMessage(e.clipboard, true))] : [];
-    }
-    if (e.key.toLowerCase() === 'm') return press(K.MENU);
-  }
-  const control = ['Backspace', 'Delete', 'Enter', 'Tab', 'Escape', 'Home', 'End',
-    'PageUp', 'PageDown', 'Insert'].includes(e.key) ||
-    e.key.startsWith('Arrow') || (e.key.startsWith('F') && e.key.length <= 3) ||
-    ['Shift', 'Control', 'Alt', 'Meta'].some((prefix) => e.key.startsWith(prefix)) ||
-    e.ctrl || e.meta;
-  if (!control && e.key.length === 1) {
-    return e.type === 'keydown' ? [message(createInjectTextMessage(e.key))] : [];
-  }
-  const keycode = codeMap[e.code];
-  if (!keycode) return [];
-  // SDK decision / React divergence: release mapped nontext fallback keys on keyup.
-  const letter = e.code >= 'KeyA' && e.code <= 'KeyZ';
-  const shift = letter ? e.shift !== e.caps_lock : e.shift;
-  const meta = (shift ? K.META_SHIFT_ON : 0) | (e.alt ? K.META_ALT_ON : 0) |
-    (e.ctrl ? K.META_CTRL_ON : 0) | (e.meta ? K.META_META_ON : 0);
-  return [message(createInjectKeycodeMessage(
-    e.type === 'keydown' ? K.ACTION_DOWN : K.ACTION_UP, keycode, 0, meta,
-  ))];
+function isReactControlKey(e: KeyEvent): boolean {
+  return CONTROL_KEYS.has(e.key) || e.key.startsWith('Arrow') ||
+    (e.key.startsWith('F') && e.key.length <= 3) ||
+    MODIFIER_PREFIXES.some((prefix) => e.key.startsWith(prefix)) || e.ctrl || e.meta;
 }
 
-export type ImeInput = {
-  operation: 'commit' | 'delete' | 'composition_update' | 'composition_end'; text: string;
-};
+function isKeyText(key: string): boolean {
+  // React accepts every single code unit; the SDK additionally accepts a printable grapheme.
+  return key.length === 1 || (key.length > 1 && !/\p{Cc}/u.test(key) &&
+    [...GRAPHEMES.segment(key)].length === 1);
+}
 
-/** SDK decision: split committed text, but send finalized composition as one text frame. */
+function keyMeta(e: KeyEvent): number {
+  const letter = e.code >= 'KeyA' && e.code <= 'KeyZ';
+  const shift = letter ? e.shift !== e.caps_lock : e.shift;
+  return (shift ? K.META_SHIFT_ON : 0) | (e.alt ? K.META_ALT_ON : 0) |
+    (e.ctrl ? K.META_CTRL_ON : 0) | (e.meta ? K.META_META_ON : 0);
+}
+
+/** Fresh state per sequence. Focus and an open control channel are preconditions. */
+export function routeKeys(c: KeySequence): Message[] {
+  const pressed = new Set<string>();
+  return c.events.flatMap((e): Message[] => {
+    const keycode = codeMap[e.code];
+    if (e.type === 'keyup') {
+      if (!pressed.delete(e.code) || !keycode) return [];
+      // SDK decision / React divergence: only release a previously sent DOWN, with keyup's metadata.
+      return [message(createInjectKeycodeMessage(K.ACTION_UP, keycode, 0, keyMeta(e)))];
+    }
+    if (e.ctrl || e.meta) {
+      if (e.key.toLowerCase() === 'v') {
+        return e.clipboard ? [message(createSetClipboardMessage(e.clipboard, true))] : [];
+      }
+      if (e.key.toLowerCase() === 'm') return press(K.MENU);
+    }
+    if (!isReactControlKey(e) && isKeyText(e.key)) {
+      return [message(createInjectTextMessage(e.key))];
+    }
+    if (!keycode) return [];
+    pressed.add(e.code);
+    return [message(createInjectKeycodeMessage(K.ACTION_DOWN, keycode, 0, keyMeta(e)))];
+  });
+}
+
+export type ImeInput =
+  | { operation: 'delete'; composition_text: string }
+  | { operation: 'commit' | 'composition_update' | 'composition_end'; text: string };
+
+/** SDK decision: finalized composition and explicit commits share the split/drop rule. */
 export function routeIme(e: ImeInput): Message[] {
-  if (e.operation === 'delete') return e.text === '' ? press(K.DEL) : [];
+  if (e.operation === 'delete') return e.composition_text === '' ? press(K.DEL) : [];
   if (e.operation === 'composition_update') return [];
-  if (e.operation === 'composition_end') return e.text ? [message(createInjectTextMessage(e.text))] : [];
   const out: Message[] = [];
   let text = '';
   const flush = () => {
@@ -63,15 +88,15 @@ export function routeIme(e: ImeInput): Message[] {
   };
   for (let i = 0; i < e.text.length; i++) {
     const char = e.text[i]!;
+    if (char === '\r' || char === '\n' || char === '\t') {
+      flush();
+      out.push(...press(char === '\t' ? K.KEYCODE_TAB : K.ENTER));
+      if (char === '\r' && e.text[i + 1] === '\n') i++;
+      continue;
+    }
     const code = char.charCodeAt(0);
-    if (code < 32 || (code >= 127 && code <= 159)) {
-      if (char === '\r' || char === '\n' || char === '\t') {
-        flush();
-        out.push(...press(char === '\t' ? K.KEYCODE_TAB : K.ENTER));
-        if (char === '\r' && e.text[i + 1] === '\n') i++;
-      }
-      // Dropped controls do not break a printable run.
-    } else text += char;
+    if (code < 32 || (code >= 127 && code <= 159)) continue;
+    text += char;
   }
   flush();
   return out;
@@ -79,25 +104,32 @@ export function routeIme(e: ImeInput): Message[] {
 
 export type PointerEvent = {
   type: 'down' | 'move' | 'up' | 'cancel'; id: number;
-  x: number; y: number; mouse: boolean; buttons: number;
+  x: number; y: number; mouse: boolean; button: number; buttons: number;
 };
 export type PointerSequence = { video_width: number; video_height: number; events: PointerEvent[] };
+const isInsideVideo = (width: number, height: number, x: number, y: number): boolean =>
+  width > 0 && height > 0 && x >= 0 && x <= width && y >= 0 && y <= height;
 
-/** SDK slots and hover routing; React's last-in-video release and message builders. */
+/** SDK slots and abstract mouse events; React's primary-button and last-position rules. */
 export function routePointers(c: PointerSequence): Message[] {
   const active = new Map<string, { slot: number; x: number; y: number }>();
   const out: Message[] = [];
   for (const e of c.events) {
+    if ((e.type === 'down' || e.type === 'up') && e.button !== 0) continue;
     const id = e.mouse ? 'mouse' : String(e.id);
     let pointer = active.get(id);
-    const inside = c.video_width > 0 && c.video_height > 0 &&
-      e.x >= 0 && e.x <= c.video_width && e.y >= 0 && e.y <= c.video_height;
+    const inside = isInsideVideo(c.video_width, c.video_height, e.x, e.y);
     let action: number;
     if (e.type === 'down') {
       if (!inside || pointer) continue;
-      const used = new Set([...active.values()].map((p) => p.slot));
-      const slot = e.mouse ? -1 : Array.from({ length: 10 }, (_, i) => i).find((i) => !used.has(i));
-      if (slot === undefined) continue;
+      let slot = MOUSE_POINTER_ID;
+      if (!e.mouse) {
+        const used = new Set([...active.values()].map((p) => p.slot));
+        for (slot = 0; slot < MAX_TOUCH_SLOTS; slot++) {
+          if (!used.has(slot)) break;
+        }
+        if (slot === MAX_TOUCH_SLOTS) continue;
+      }
       pointer = { slot, x: e.x, y: e.y };
       active.set(id, pointer);
       action = A.ACTION_DOWN;
@@ -129,9 +161,10 @@ export type GeometryInput = {
   view_width: number; view_height: number; video_width: number; video_height: number;
   rotation: 0 | 90 | 180 | 270; x: number; y: number;
 };
+export type VideoPoint = { width: number; height: number; x: number; y: number };
 
 /** SDK decision: rotate dimensions upright before React's aspect-fit mapping. */
-export function mapPoint(c: GeometryInput): { x: number; y: number } | null {
+export function mapPoint(c: GeometryInput): VideoPoint | null {
   const quarter = c.rotation === 90 || c.rotation === 270;
   const width = quarter ? c.video_height : c.video_width;
   const height = quarter ? c.video_width : c.video_height;
@@ -142,14 +175,20 @@ export function mapPoint(c: GeometryInput): { x: number; y: number } | null {
   const x = c.x - (c.view_width - renderedWidth) / 2;
   const y = c.y - (c.view_height - renderedHeight) / 2;
   if (x < 0 || y < 0 || x > renderedWidth || y > renderedHeight) return null;
-  return { x: Math.max(0, Math.min(width, x / renderedWidth * width)),
-    y: Math.max(0, Math.min(height, y / renderedHeight * height)) };
+  return {
+    width, height,
+    x: Math.max(0, Math.min(width, x / renderedWidth * width)),
+    y: Math.max(0, Math.min(height, y / renderedHeight * height)),
+  };
 }
 
 export type ScrollInput = {
   video_width: number; video_height: number; x: number; y: number;
   h: number; v: number; buttons: number;
 };
-export const routeScroll = (c: ScrollInput): Message[] => [message(createInjectScrollEventMessage(
-  c.video_width, c.video_height, c.x, c.y, c.h, c.v, c.buttons,
-))];
+export function routeScroll(c: ScrollInput): Message[] {
+  if (!isInsideVideo(c.video_width, c.video_height, c.x, c.y)) return [];
+  return [message(createInjectScrollEventMessage(
+    c.video_width, c.video_height, c.x, c.y, c.h, c.v, c.buttons,
+  ))];
+}

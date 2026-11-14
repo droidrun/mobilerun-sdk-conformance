@@ -300,9 +300,9 @@
       ]
     },
     {
-      "name": "empty buffer delete",
+      "name": "empty marked composition delete",
       "operation": "delete",
-      "text": "",
+      "composition_text": "",
       "expect": [
         {
           "channel": "control",
@@ -315,9 +315,9 @@
       ]
     },
     {
-      "name": "nonempty buffer delete stays local",
+      "name": "nonempty marked composition delete stays local",
       "operation": "delete",
-      "text": "a",
+      "composition_text": "a",
       "expect": []
     },
     {
@@ -338,13 +338,33 @@
       ]
     },
     {
-      "name": "composition finalized unsplit",
+      "name": "composition finalized splits and drops",
       "operation": "composition_end",
-      "text": "a\t\nb",
+      "text": "a\t\nb\u0000",
       "expect": [
         {
           "channel": "control",
-          "hex": "010400000061090a62"
+          "hex": "010100000061"
+        },
+        {
+          "channel": "control",
+          "hex": "00003d0000000000000000000000"
+        },
+        {
+          "channel": "control",
+          "hex": "00013d0000000000000000000000"
+        },
+        {
+          "channel": "control",
+          "hex": "0000420000000000000000000000"
+        },
+        {
+          "channel": "control",
+          "hex": "0001420000000000000000000000"
+        },
+        {
+          "channel": "control",
+          "hex": "010100000062"
         }
       ]
     },

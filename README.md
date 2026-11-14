@@ -88,39 +88,146 @@ None. Every case is expressible as data. The two delay-function tests are in `po
 
 ## Input vectors
 
-Each file in `input/` is `{ "cases": [ ... ] }`. Cases have a unique `name`, the input fields below, and `expect`. Except for geometry, `expect` is an ordered list of `{ "channel": "control" | "hover", "hex": "..." }`; an empty list means no message. Replay each case independently with fresh state, collecting messages in send order and comparing channel and bytes exactly. All channels are open, the video is focused and available, and clipboard reads succeed. These vectors specify routing, not DOM focus, channel availability, frame coalescing or operating-system event translation.
+Each file in `input/` is `{ "cases": [ ... ] }`. Each case has a unique `name`, the inputs below,
+and `expect`. Except for geometry, `expect` is an ordered list of
+`{ "channel": "control" | "hover", "hex": "..." }`; an empty list means no message.
+Replay each case independently with fresh state, collect messages in send order, then compare
+channel and bytes exactly. Keyboard and pointer cases replay their entire `events[]` array.
+All channels are open, the video is focused and available, and clipboard reads succeed.
+These vectors specify routing, not DOM focus, channel availability, frame coalescing or native
+operating-system event translation.
 
-The reference in `generator/src/input.ts` calls the real encoders and constants from the pinned `@mobilerun/react` package; it does not encode bytes itself. Keyboard routing follows `src/hooks/use-scrcpy-input.ts` at React commit `68098f4bb8df0e6af5bc10a093a77b1e63a7423b`, whose hook source matches the published `0.2.1` source map, except for the SDK fallback release described below. Self-tests compare keyboard cases with the actual published hook, assert that explicit divergence, and independently decode and re-encode all generated input messages.
+The reference in `generator/src/input.ts` uses the real encoders and constants from the pinned
+`@mobilerun/react` package; it does not encode bytes itself. The React path comes from
+`src/hooks/use-scrcpy-input.ts` at commit `68098f4bb8df0e6af5bc10a093a77b1e63a7423b`.
+Its hook source matches the published `0.2.1` source map. Self-tests exercise that actual hook,
+derive the sequences whose output differs from the reference, and require that set to equal the
+sequences labelled with SDK decisions. All generated messages have independent decode, hex and
+channel checks; the existing control fixtures also retain their encoder round-trip checks.
 
-| File | Case inputs | Replay rule and source |
+| File | Case inputs | Replay rule |
 |---|---|---|
-| `keys.json` | `type` (`keydown`/`keyup`), `code`, `key`, `shift`, `alt`, `ctrl`, `meta`, `caps_lock`, `clipboard` | Pass one event through React's keyboard routing with the SDK fallback-release exception below. Flags are booleans; `key` is the produced browser key value and `code` is its physical code. Each case is independent, including keyup cases. |
-| `ime.json` | `operation`, `text` | Apply one SDK operation: `commit`, `delete`, `composition_update`, or `composition_end`, as described below. |
-| `pointers.json` | `video_width`, `video_height`, `events[]` | Start with no active pointers; replay events in array order, concatenate all emitted messages, then compare with `expect`. Each event has `type` (`down`/`move`/`up`/`cancel`), `id`, `x`, `y`, `mouse`, `buttons`. Positions are already in upright video pixels. |
-| `geometry.json` | `view_width`, `view_height`, `video_width`, `video_height`, `rotation`, `x`, `y` | Map the view-local point to upright video pixels. `expect` is `{ "x", "y" }` or `null`; no wire message is emitted. Compare coordinates with absolute tolerance `1e-6` pixels. |
-| `scroll.json` | `video_width`, `video_height`, `x`, `y`, `h`, `v`, `buttons` | Pass abstract horizontal/vertical ticks directly to React's scroll encoder. Positive ticks mean left/up. The browser's wheel delta-mode conversion and sign inversion have already happened. |
+| `keys.json` | `events[]`, `sdk_decisions[]` | Stateful keyboard replay; React path plus SDK decisions below. |
+| `ime.json` | `operation`, `text` or `composition_text` | One SDK composition/commit operation. |
+| `pointers.json` | Video dimensions, `events[]` | `buttons` only in hover; mouse ignores `id`; SDK slots. |
+| `geometry.json` | View/video dimensions, `rotation`, `x`, `y` | Map into upright video pixels or reject. |
+| `scroll.json` | Video dimensions, `x`, `y`, `h`, `v`, `buttons` | React bounds check and tick encoder. |
 
-### React paths
+**Lone-surrogate JSON warning:** input strings can contain unpaired UTF-16 surrogate escapes,
+for example `"\ud83d"` in keyboard `key` or IME `text`. Dart, Kotlin and Swift JSON parsers may
+reject or replace these strings. Use a parser or escape/hex workaround that preserves the original
+code unit for routing. The React `TextEncoder` writes each unpaired surrogate as U+FFFD (`efbfbd`),
+so decoding its wire frame is lossy. This is the same parsing requirement as the control fixtures.
 
-Keyboard shortcut handling has first priority on keydown: Ctrl/Cmd+V sends one SET_CLIPBOARD with `paste = true` if `clipboard` is nonempty; Ctrl/Cmd+M sends MENU down and up with no modifiers. Keyup follows normal routing, so these shortcut keys can still emit their ordinary V/M keycode up when Ctrl/Cmd remains held.
+### Keyboard: React path
 
-Next, React tests `key` for named control/navigation keys, modifier prefixes, arrow prefixes, its `F` prefix heuristic (length at most three UTF-16 code units), or a held Ctrl/Meta flag. These use `codeMap` and emit keycode down/up when mapped. The heuristic also classifies the single uppercase `F` as a control key; F13–F24 are unmapped in the current `codeMap` and emit nothing. Browser NumpadEnter uses `code = "NumpadEnter"`, `key = "Enter"`.
+Every event has `type` (`keydown`/`keyup`), `code`, `key`, `shift`, `alt`, `ctrl`, `meta`,
+`caps_lock` and `clipboard`. Flags are booleans. `key` is the produced browser key value; `code`
+is the physical code. Replay all events on a fresh set of pressed codes. `sdk_decisions` lists
+output-changing decisions for that sequence: `tracked_key_release` and/or `grapheme_text`.
+An empty list means that sequence's complete output matches React.
 
-For remaining keys, keydown with `key.length === 1` (UTF-16 code units) sends INJECT_TEXT, including control characters and unknown physical codes. It emits nothing on keyup. Other keydown values use a mapped keycode DOWN fallback. React omits the corresponding fallback keyup; the SDK decision below deliberately fixes that behavior. An unmapped code emits nothing when it reaches the keycode path. A non-BMP emoji occupies two UTF-16 code units and therefore takes the fallback, as the vectors demonstrate.
+On keydown, React shortcut handling has first priority: Ctrl/Cmd plus produced key `v` sends
+SET_CLIPBOARD with `paste = true` when `clipboard` is nonempty; Ctrl/Cmd plus produced key `m`
+sends MENU down/up with metadata zero. Matching uses `key`, case-insensitively, regardless of
+`code`. Thus Ctrl+key `v` on code Period pastes, while Ctrl+key `.` on code KeyV injects KEYCODE_V.
 
-Keycode metadata contains only SHIFT `1`, ALT `2`, CTRL `4096` and META `65536`. For letter codes `KeyA`–`KeyZ`, effective shift is physical shift XOR CapsLock. CapsLock does not toggle shift for nonletters. Repeat is always zero.
+Next, React checks named control/navigation keys, modifier prefixes, arrow prefixes, its `F`
+prefix heuristic (length at most three UTF-16 code units), or held Ctrl/Meta. These use `codeMap`.
+The heuristic classifies uppercase `F` as a control key. F13 represents unmapped F13–F24.
+Browser NumpadEnter has `code = "NumpadEnter"`, `key = "Enter"`.
 
-React also supplies the scroll tick-to-i16 fixed-point rule (ticks/16, clamp, round, saturate), the binary encoders, and the pointer rules that ignore outside movement and release UP/CANCEL at the last in-video position. All pointer messages use pressure `1` and PRIMARY for both action button and buttons, including UP/CANCEL, matching the React touch builder calls.
+For remaining keys, a single UTF-16 code unit uses INJECT_TEXT, including control characters and
+unknown physical codes. Other values use a mapped keycode DOWN fallback, except for the grapheme
+SDK decision below. Unmapped fallback codes emit nothing. Named values such as `Dead` and
+`ContextMenu` stay keys, as do strings with multiple grapheme clusters.
 
-### SDK decisions
+Keycode metadata contains only SHIFT `1`, ALT `2`, CTRL `4096` and META `65536`. For letter
+codes `KeyA`–`KeyZ`, effective shift is physical shift XOR CapsLock. CapsLock does not toggle shift
+for nonletters. Repeat is always zero. The modifier-mask vectors use a control key so every mask
+actually exercises keycode metadata.
 
-**React divergence — fallback key release.** A mapped key that reaches React's noncontrol fallback branch emits INJECT_KEYCODE DOWN on keydown **and UP on keyup**, with the same metadata normalization as control keys. The predicate is: no control-key match, no Ctrl/Meta combo, and `key.length !== 1` in UTF-16 code units. This covers ContextMenu, numpad keys without text (for example with NumLock off), dead keys, and Alt+letter without a character. It also applies when React treats a multi-code-unit value as a fallback. React currently emits only DOWN and can leave these keys pressed. This is an SDK decision; ordinary single-code-unit text keyups still emit nothing, and unmapped fallback codes remain ignored.
+### Keyboard: SDK decisions
 
-React has no IME commit API. `commit` splits text at LF, CR, CRLF and TAB: printable text runs use INJECT_TEXT, CRLF counts as one ENTER down/up, standalone CR/LF use ENTER down/up, and TAB uses TAB down/up. Other C0 controls (`U+0000`–`U+001F`), DEL and C1 controls (`U+007F`–`U+009F`) are dropped and do not break a remaining text run. Unicode outside those ranges is preserved. `delete` uses `text` as the local buffer: only an empty buffer emits DEL down/up. Composition updates remain local; `composition_end` sends the nonempty finalized string as one INJECT_TEXT without splitting. Empty operations emit nothing. Synthetic presses have repeat and metadata zero.
+**Tracked key release (`tracked_key_release`).** Record a physical `code` only when its keydown
+emits INJECT_KEYCODE DOWN. Keyup emits UP only if that code is still recorded, then removes it.
+Use the keyup event's current metadata, even if a modifier was released first or the produced
+`key` changed. Text input and paste/menu shortcuts do not record their physical code; MENU's
+synthetic down/up is already complete. Unmatched and duplicate keyups emit nothing.
 
-The SDK pointer adapter assigns each touch id the lowest free stable slot `0`–`9`; an eleventh concurrent touch is ignored. A released slot is reusable immediately; duplicate active downs and unmatched touch events are ignored. Mouse identity is separate from touch identity, ignores the event's `id`, and always uses wire pointer id `-1`. Bounds are inclusive. An outside DOWN is ignored. Active MOVE outside is ignored; UP/CANCEL releases at the last valid position even if the release coordinates are elsewhere. Mouse MOVE with no active mouse gesture emits a hover frame on `hover`, preserving `buttons`; it never falls back to `control`. These abstract mouse/hover events and slot allocation are SDK decisions; the underlying hover encoder/channel and last-position rule come from React.
+React divergence: React omits fallback releases and can emit orphan V/M releases after shortcuts;
+SDK replay balances sent keycode DOWNs and suppresses every UP without a recorded DOWN.
 
-Geometry is an SDK input contract built on aspect-fit letterboxing. `rotation` is clockwise degrees (`0`, `90`, `180`, `270`) applied to the decoded `video_width`/`video_height`: 90/270 swap dimensions. Both the input view point and output video point use the upright picture's axes, so no additional inverse rotation is applied. Fit that upright picture inside the view, center it, reject points in the letterbox, and map inclusively onto video pixels without rounding. Nonpositive view/video dimensions yield `null`. Wire encoders perform coordinate rounding later. Inputs are finite JSON numbers; dimensions are integers.
+**Grapheme text (`grapheme_text`).** Outside the control/shortcut path, a produced value that is
+exactly one extended grapheme cluster (Unicode UAX #29) with more than one UTF-16 code unit uses INJECT_TEXT on
+keydown. This includes emoji, ZWJ/skin-tone sequences and NFD combining sequences. Preserve the
+string without normalization. Multi-unit values containing control characters are not printable
+graphemes. Text still emits nothing on keyup because it did not record a keycode DOWN.
+
+React divergence: React treats these multi-unit values as keycode fallbacks, or ignores them if
+the physical code is unmapped; the SDK sends their produced text.
+
+### IME: SDK decisions
+
+`commit`, `composition_update` and `composition_end` have a `text` field. Both `commit` and
+`composition_end` split finalized text by the same rule: printable runs use INJECT_TEXT,
+CRLF counts as one ENTER down/up, standalone CR/LF uses ENTER down/up, and TAB uses TAB down/up.
+Other C0 controls (`U+0000`–`U+001F`), DEL and C1 controls (`U+007F`–`U+009F`) are dropped and
+do not break the remaining text run. Other Unicode is preserved. Composition updates stay local.
+Empty text emits nothing. Synthetic presses have repeat and metadata zero.
+
+`delete` instead has `composition_text`: the current **uncommitted marked composition text**,
+not previously committed text or the remote editor's contents. If that marked text is nonempty,
+the deletion stays local. If it is empty, emit DEL down/up. React has no IME commit API; these
+are SDK decisions, with no separate raw-control path for finalized composition.
+
+### Pointers: React path and SDK decisions
+
+Each event has `type` (`down`/`move`/`up`/`cancel`), `id`, `x`, `y`, `mouse`, `button` and
+`buttons`. Positions and `video_width`/`video_height` use upright video pixels. `id` is ignored
+when `mouse` is true. `button` is the event's changed-button ordinal: `0` primary, `1` middle,
+`2` secondary. Only primary down/up starts or ends a gesture; touch events use `button = 0`.
+Other button down/up events emit no touch frame. CANCEL releases an active gesture regardless
+of the changed button.
+
+`buttons` is the held-button mask and reaches the wire **only in hover frames** (`1` primary,
+`2` secondary, `4` middle). Gesture frames always use PRIMARY for both action button and buttons,
+and pressure `1`, including UP/CANCEL, matching the React path.
+
+The SDK decision assigns each touch id the lowest free stable slot `0`–`9`; an eleventh
+concurrent touch is ignored. Released slots are immediately reusable; duplicate downs and
+unmatched touch events are ignored. Mouse identity is separate and always uses wire id `-1`.
+
+React divergence: React forwards raw touch identifiers; the SDK assigns bounded reusable slots.
+
+The React path uses inclusive video bounds, ignores outside DOWN and MOVE, and releases UP/CANCEL
+at the last in-video position even when release coordinates are elsewhere. Mouse MOVE with no
+active mouse gesture emits a hover frame on `hover`, preserving `buttons`; it never falls back
+to `control`. A touch slot being active does not prevent independent mouse hover. The abstract
+pointer event vocabulary is an SDK input contract; primary-button and channel rules match React.
+
+### Geometry: SDK decisions
+
+Cases have `view_width`, `view_height`, decoded `video_width`, `video_height`, `rotation`, `x`
+and `y`. `rotation` is clockwise degrees (`0`, `90`, `180`, `270`); 90/270 swap decoded dimensions.
+Fit the upright picture inside the view, center it and reject points in the letterbox. Valid
+`expect` is `{ "width", "height", "x", "y" }`, with upright video dimensions and the mapped point;
+invalid geometry or outside points return `null`. Compare coordinates within `1e-6` pixels.
+Nonpositive view/video dimensions are invalid. Both point axes already describe the upright
+picture, so no inverse rotation is applied. No wire message is emitted by geometry.
+
+**Pointers and scroll must use `expect.width`/`expect.height` as their video dimensions**, including
+for rotation 90/270, rather than the decoded frame dimensions. Mapping does not round coordinates;
+the wire encoders round later. Inputs are finite JSON numbers and dimensions are integers.
+React supplies aspect-fit mapping; rotation/dimension output is an SDK input contract.
+
+### Scroll: React path
+
+Cases have `video_width`, `video_height`, `x`, `y`, abstract ticks `h`, `v`, and held `buttons`.
+Reject nonpositive video dimensions and outside points using the same inclusive bounds as pointers;
+these cases have `expect: []`. Otherwise pass ticks directly to React's scroll encoder: ticks/16,
+clamp to `[-1, 1]`, multiply by `0x8000`, round and cap at `0x7fff`. Positive ticks mean left/up.
+Browser delta-mode conversion and sign inversion have already happened before this input boundary.
 
 ## Regeneration
 
@@ -147,8 +254,8 @@ Semantic version tags (`v0.1.0` after the first merge). A change that alters any
 ### v0.2.0
 
 - Added language-neutral input vectors for keyboard routing, modifiers, IME commits, touch slots, mouse/hover, letterbox geometry and scroll ticks.
-- Documented React routing parity separately from SDK decisions; added published-hook parity and input-message round-trip self-tests.
-- Release mapped noncontrol fallback keys on keyup as an explicit SDK divergence from React's missing release.
+- Documented React paths separately from SDK decisions; check the exact divergence set against the published hook.
+- Track keycode DOWNs for balanced releases and route one grapheme as text; label React divergences.
 - Existing control, signalling and reconnect fixture files are unchanged.
 
 ### v0.1.1

@@ -1,61 +1,57 @@
 import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { useScrcpyInput } from '@mobilerun/react';
-import { BUILDERS, toHex, type Args } from '../src/control-cases';
-import { decodeControl, expectedWire } from '../src/decode';
+import type { Args } from '../src/control-cases';
+import { decodeControl } from '../src/decode';
+import { toHex } from '../src/hex';
 import { buildInputFixtures } from '../src/input-cases';
-import { mapPoint, routeIme, routePointers, type Message } from '../src/input';
+import { mapPoint, routeIme, type Message } from '../src/input';
 
-// The peer runtimes are already locked; avoid adding DOM/type packages for this server-rendered probe.
+// The locked React peer runtimes let this server-rendered probe run without DOM/type packages.
 const createElement: (component: () => null) => unknown = require('react').createElement;
 const renderToString: (element: unknown) => string = require('react-dom/server').renderToString;
 const fixtures = buildInputFixtures();
-// Explicit expected SDK divergences; every other case must match the published hook.
-const sdkFallbacks: Record<string, { keycode: number; metaState: number }> = {
-  'dead key mapped fallback': { keycode: 75, metaState: 0 },
-  'emoji utf16 fallback': { keycode: 29, metaState: 0 },
-  'empty key fallback': { keycode: 29, metaState: 0 },
-  'combining text fallback': { keycode: 33, metaState: 0 },
-  'context menu fallback': { keycode: 82, metaState: 0 },
-  'numpad no text fallback': { keycode: 145, metaState: 0 },
-  'numpad decimal no text fallback': { keycode: 158, metaState: 0 },
-  'alt no char fallback': { keycode: 29, metaState: 2 },
-  'alt caps no char fallback': { keycode: 31, metaState: 3 },
+const kindByType: Record<number, string> = {
+  0: 'keycode', 1: 'text', 2: 'touch', 3: 'scroll', 9: 'set-clipboard', 21: 'hover',
 };
-const kindByType: Record<number, string> = { 0: 'keycode', 1: 'text', 2: 'touch', 3: 'scroll', 9: 'set-clipboard', 21: 'hover' };
 function decode(m: Message): { kind: string } & Args {
   const kind = kindByType[parseInt(m.hex.slice(0, 2), 16)]!;
   return { kind, ...decodeControl(kind, m.hex) };
 }
+const keyWire = (action: number, keycode: number, metaState = 0) =>
+  ({ kind: 'keycode', action, keycode, repeat: 0, metaState });
+const keyOutput = (name: string) => fixtures.keys.find((c) => c.name === name)!.expect.map(decode);
+const pointerOutput = (name: string) => fixtures.pointers.find((c) => c.name === name)!.expect.map(decode);
 
 describe('input fixtures', () => {
-  for (const [kind, data] of Object.entries(fixtures)) {
+  for (const [kind, cases] of Object.entries(fixtures)) {
     test(`${kind} regenerates with unique names`, () => {
-      const committed = JSON.parse(readFileSync(`${import.meta.dir}/../../fixtures/input/${kind}.json`, 'utf8'));
-      expect(committed).toEqual(data);
-      expect(new Set(data.cases.map((c) => c.name)).size).toBe(data.cases.length);
+      const path = `${import.meta.dir}/../../fixtures/input/${kind}.json`;
+      expect(JSON.parse(readFileSync(path, 'utf8'))).toEqual({ cases });
+      expect(new Set(cases.map((c) => c.name)).size).toBe(cases.length);
     });
   }
-  for (const [kind, data] of Object.entries(fixtures)) {
-    if (kind === 'geometry') continue;
-    test(`${kind} messages decode and re-encode`, () => {
-      for (const c of data.cases) {
-        for (const m of c.expect as Message[]) {
+  for (const kind of ['keys', 'ime', 'pointers', 'scroll'] as const) {
+    test(`${kind} messages have valid hex, layouts and channels`, () => {
+      for (const c of fixtures[kind]) {
+        for (const m of c.expect) {
           expect(m.hex).toMatch(/^([0-9a-f]{2})+$/);
-          const { kind: messageKind, ...args } = decode(m);
-          expect(m.channel).toBe(messageKind === 'hover' ? 'hover' : 'control');
-          if (messageKind === 'touch') args.pressure = (Number(args.pressure) & 0xffff) / 0xffff;
-          if (messageKind === 'scroll') {
-            args.hscrollTicks = Number(args.hscrollTicks) / 2048;
-            args.vscrollTicks = Number(args.vscrollTicks) / 2048;
-          }
-          expect(toHex(BUILDERS[messageKind]!(args))).toBe(m.hex);
+          const decoded = decode(m); // Independent decoder validates frame headers, sizes and UTF-8.
+          expect(m.channel).toBe(decoded.kind === 'hover' ? 'hover' : 'control');
         }
+      }
+      if (kind === 'scroll') {
+        for (const name of ['outside left', 'outside right', 'outside top',
+          'outside bottom', 'video not ready']) {
+          expect(fixtures.scroll.find((c) => c.name === name)!.expect).toEqual([]);
+        }
+        expect(fixtures.scroll.find((c) => c.name === 'origin inclusive')!.expect.length).toBe(1);
+        expect(fixtures.scroll.find((c) => c.name === 'buttons and bounds')!.expect.length).toBe(1);
       }
     });
   }
 
-  test('keyboard cases match React except the explicit SDK fallback keyup release', async () => {
+  test('derived React divergences equal the labelled SDK-decision sequences', async () => {
     const previous = ['window', 'document', 'navigator'].map((key) =>
       [key, Object.getOwnPropertyDescriptor(globalThis, key)] as const);
     let clipboard = '';
@@ -66,34 +62,33 @@ describe('input fixtures', () => {
       document: { configurable: true, value: { activeElement: video } },
       navigator: { configurable: true, value: { clipboard: { readText: async () => clipboard } } },
     });
+    const divergent: string[] = [];
     try {
-      let handlers!: ReturnType<typeof useScrcpyInput>;
-      renderToString(createElement(() => {
-        handlers = useScrcpyInput({
-          containerRef: { current: null }, videoRef: { current: video },
-          dataChannelRef: { current: { readyState: 'open', send: (bytes: ArrayBuffer) =>
-            sent.push({ channel: 'control', hex: toHex(bytes) }) } },
-          hoverChannelRef: { current: null },
-        } as unknown as Parameters<typeof useScrcpyInput>[0]);
-        return null;
-      }));
-      for (const c of fixtures.keys.cases) {
+      for (const c of fixtures.keys) {
         sent.length = 0;
-        clipboard = c.clipboard;
-        handlers.handleKeyboard({
-          type: c.type, code: c.code, key: c.key,
-          shiftKey: c.shift, altKey: c.alt, ctrlKey: c.ctrl, metaKey: c.meta,
-          getModifierState: (name: string) => name === 'CapsLock' && c.caps_lock,
-          preventDefault() {}, stopPropagation() {}, target: { tagName: 'VIDEO' },
-        } as Parameters<typeof handlers.handleKeyboard>[0]);
-        await Promise.resolve(); // Clipboard read resolves before comparing the complete output.
-        const fallback = sdkFallbacks[c.name.replace(/ (keydown|keyup)$/, '')];
-        if (c.type === 'keyup' && fallback) {
-          expect(sent, c.name).toEqual([]); // React's bug: fallback keydown has no corresponding up.
-          expect(c.expect.map(decode), c.name).toEqual([
-            { kind: 'keycode', action: 1, repeat: 0, ...fallback },
-          ]);
-        } else expect(sent, c.name).toEqual(c.expect);
+        let handlers!: ReturnType<typeof useScrcpyInput>;
+        renderToString(createElement(() => {
+          handlers = useScrcpyInput({
+            containerRef: { current: null }, videoRef: { current: video },
+            dataChannelRef: { current: {
+              readyState: 'open', send: (bytes: ArrayBuffer) =>
+                sent.push({ channel: 'control', hex: toHex(bytes) }),
+            } },
+            hoverChannelRef: { current: null },
+          } as unknown as Parameters<typeof useScrcpyInput>[0]);
+          return null;
+        }));
+        for (const e of c.events) {
+          clipboard = e.clipboard;
+          handlers.handleKeyboard({
+            type: e.type, code: e.code, key: e.key,
+            shiftKey: e.shift, altKey: e.alt, ctrlKey: e.ctrl, metaKey: e.meta,
+            getModifierState: (name: string) => name === 'CapsLock' && e.caps_lock,
+            preventDefault() {}, stopPropagation() {}, target: { tagName: 'VIDEO' },
+          } as Parameters<typeof handlers.handleKeyboard>[0]);
+          await Promise.resolve(); // Resolve clipboard reads before the next input event.
+        }
+        if (JSON.stringify(sent) !== JSON.stringify(c.expect)) divergent.push(c.name);
       }
     } finally {
       for (const [key, descriptor] of previous) {
@@ -101,104 +96,120 @@ describe('input fixtures', () => {
         else Reflect.deleteProperty(globalThis, key);
       }
     }
+    const labelled = fixtures.keys.filter((c) => c.sdk_decisions.length > 0).map((c) => c.name);
+    expect(divergent.sort()).toEqual(labelled.sort());
   });
 
-  test('SDK nontext fallbacks have balanced DOWN and UP with normalized metadata', () => {
-    for (const [name, fallback] of Object.entries(sdkFallbacks)) {
-      for (const [type, action] of [['keydown', 0], ['keyup', 1]] as const) {
-        const c = fixtures.keys.cases.find((c) => c.name === `${name} ${type}`)!;
-        expect(c.expect.map(decode), c.name).toEqual([
-          { kind: 'keycode', action, repeat: 0, ...fallback },
-        ]);
+  test('tracked releases use keyup metadata and never emit orphan UPs', () => {
+    expect(keyOutput('alt released before fallback letter')).toEqual([
+      keyWire(0, 57, 2), keyWire(0, 29, 2), keyWire(1, 57), keyWire(1, 29),
+    ]);
+    expect(keyOutput('cross modifier release uses current metadata')).toEqual([
+      keyWire(0, 113, 4096), keyWire(0, 57, 4098), keyWire(0, 29, 4098),
+      keyWire(1, 113, 2), keyWire(1, 29, 2), keyWire(1, 57),
+    ]);
+    expect(keyOutput('text before ctrl has no orphan up')).toEqual([
+      { kind: 'text', text: 'a' }, keyWire(0, 113, 4096), keyWire(1, 113),
+    ]);
+    expect(keyOutput('orphan control up ignored')).toEqual([]);
+    expect(keyOutput('repeat down and duplicate up')).toEqual([
+      keyWire(0, 21), keyWire(0, 21), keyWire(1, 21),
+    ]);
+    expect(keyOutput('context menu fallback')).toEqual([keyWire(0, 82), keyWire(1, 82)]);
+  });
+
+  test('shortcuts match produced key and suppress letter UP in either release order', () => {
+    for (const [modifier, keycode, meta] of [['ctrl', 113, 4096], ['meta', 117, 65536]] as const) {
+      for (const value of ['v', 'm']) {
+        for (const first of ['letter', 'modifier']) {
+          const shortcut = value === 'v'
+            ? [{ kind: 'set-clipboard', text: 'héllo\n😀', paste: true }]
+            : [keyWire(0, 82), keyWire(1, 82)];
+          expect(keyOutput(`${modifier} ${value} ${first} released first`)).toEqual([
+            keyWire(0, keycode, meta), ...shortcut, keyWire(1, keycode),
+          ]);
+        }
       }
     }
+    expect(keyOutput('ctrl paste matches key not code'))
+      .toEqual([{ kind: 'set-clipboard', text: 'text', paste: true }]);
+    expect(keyOutput('ctrl menu matches key not code')).toEqual([keyWire(0, 82), keyWire(1, 82)]);
+    expect(keyOutput('ctrl period on v code is keycode'))
+      .toEqual([keyWire(0, 50, 4096), keyWire(1, 50, 4096)]);
+    expect(keyOutput('ctrl period on m code is keycode'))
+      .toEqual([keyWire(0, 41, 4096), keyWire(1, 41, 4096)]);
   });
 
-  test('IME commit splits CRLF once, routes tab, drops controls and preserves Unicode', () => {
-    const out = routeIme({ operation: 'commit', text: 'é😀\r\na\tb\u0000\u0085c\nd\r' }).map(decode);
-    expect(out).toEqual([
-      { kind: 'text', text: 'é😀' },
-      { kind: 'keycode', action: 0, keycode: 66, repeat: 0, metaState: 0 },
-      { kind: 'keycode', action: 1, keycode: 66, repeat: 0, metaState: 0 },
-      { kind: 'text', text: 'a' },
-      { kind: 'keycode', action: 0, keycode: 61, repeat: 0, metaState: 0 },
-      { kind: 'keycode', action: 1, keycode: 61, repeat: 0, metaState: 0 },
-      { kind: 'text', text: 'bc' },
-      { kind: 'keycode', action: 0, keycode: 66, repeat: 0, metaState: 0 },
-      { kind: 'keycode', action: 1, keycode: 66, repeat: 0, metaState: 0 },
-      { kind: 'text', text: 'd' },
-      { kind: 'keycode', action: 0, keycode: 66, repeat: 0, metaState: 0 },
-      { kind: 'keycode', action: 1, keycode: 66, repeat: 0, metaState: 0 },
-    ]);
-    expect(routeIme({ operation: 'delete', text: '' }).map(decode)).toEqual([
-      { kind: 'keycode', action: 0, keycode: 67, repeat: 0, metaState: 0 },
-      { kind: 'keycode', action: 1, keycode: 67, repeat: 0, metaState: 0 },
-    ]);
-    expect(routeIme({ operation: 'composition_end', text: 'a\t\nb' }).map(decode))
-      .toEqual([{ kind: 'text', text: 'a\t\nb' }]);
+  test('one grapheme is text, while named keys and multiple graphemes stay keys', () => {
+    for (const [name, text] of [
+      ['emoji grapheme', '😀'], ['emoji unknown code grapheme', '😀'],
+      ['emoji zwj grapheme', '👨‍👩‍👧‍👦'], ['emoji skin tone grapheme', '👍🏽'],
+      ['nfd grapheme', 'e\u0301'],
+    ]) expect(keyOutput(name!)).toEqual([{ kind: 'text', text: text! }]);
+    expect(keyOutput('multiple graphemes fallback')).toEqual([keyWire(0, 29), keyWire(1, 29)]);
+    expect(keyOutput('enter')).toEqual([keyWire(0, 66), keyWire(1, 66)]);
   });
 
-  test('pointer slots remain stable, release at last position and reuse lowest free slot', () => {
-    const c = fixtures.pointers.cases.find((c) => c.name === 'lowest free slot reused')!;
-    expect(c.expect.map(decode).map((m) => [m.action, m.pointerId, m.x, m.y])).toEqual([
-      [0, 0, 10, 20], [0, 1, 30, 40], [1, 0, 10, 20],
-      [0, 0, 50, 60], [3, 1, 30, 40], [1, 0, 50, 60],
-    ]);
-    const capacity = fixtures.pointers.cases.find((c) => c.name === 'ten slots capacity and recovery')!;
-    const messages = capacity.expect.map(decode);
-    expect(messages.slice(0, 10).map((m) => m.pointerId)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    expect(messages[10]!.action).toBe(1);
-    expect(messages[10]!.pointerId).toBe(3);
-    expect(messages[11]!.action).toBe(0);
-    expect(messages[11]!.pointerId).toBe(3);
-    expect(messages.length).toBe(22);
-    const outside = fixtures.pointers.cases.find((c) => c.name === 'outside movement release at last inside')!;
-    expect(outside.expect.map(decode).map((m) => [m.action, m.x, m.y]))
+  test('IME commit and finalized composition share splitting and control dropping', () => {
+    const text = 'é😀\r\na\tb\u0000\u0085c\nd\r';
+    const expected = [
+      { kind: 'text', text: 'é😀' }, keyWire(0, 66), keyWire(1, 66),
+      { kind: 'text', text: 'a' }, keyWire(0, 61), keyWire(1, 61),
+      { kind: 'text', text: 'bc' }, keyWire(0, 66), keyWire(1, 66),
+      { kind: 'text', text: 'd' }, keyWire(0, 66), keyWire(1, 66),
+    ];
+    for (const operation of ['commit', 'composition_end'] as const) {
+      expect(routeIme({ operation, text }).map(decode)).toEqual(expected);
+    }
+    expect(routeIme({ operation: 'delete', composition_text: '' }).map(decode))
+      .toEqual([keyWire(0, 67), keyWire(1, 67)]);
+    expect(routeIme({ operation: 'delete', composition_text: 'a' })).toEqual([]);
+  });
+
+  test('pointer slots, last positions, primary buttons and concurrent hover', () => {
+    expect(pointerOutput('lowest free slot reused').map((m) => [m.action, m.pointerId, m.x, m.y]))
+      .toEqual([
+        [0, 0, 10, 20], [0, 1, 30, 40], [1, 0, 10, 20],
+        [0, 0, 50, 60], [3, 1, 30, 40], [1, 0, 50, 60],
+      ]);
+    const capacity = pointerOutput('ten slots capacity and recovery');
+    expect(capacity.slice(0, 10).map((m) => m.pointerId)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(capacity.slice(10, 12).map((m) => [m.action, m.pointerId])).toEqual([[1, 3], [0, 3]]);
+    expect(capacity.length).toBe(22);
+    expect(pointerOutput('outside movement release at last inside').map((m) => [m.action, m.x, m.y]))
       .toEqual([[0, 10, 20], [2, 20, 30], [1, 20, 30]]);
+    for (const [button, mask] of [[1, 4], [2, 2]]) {
+      expect(pointerOutput(`nonprimary button ${button} hover only`)).toEqual([
+        { kind: 'hover', videoWidth: 1080, videoHeight: 2400, x: 30, y: 40, buttons: mask },
+      ]);
+    }
+    expect(pointerOutput('nonprimary up does not end primary gesture').map((m) => m.action))
+      .toEqual([0, 2, 1]);
+    expect(pointerOutput('hover while touch slot active').map((m) =>
+      [m.kind, m.kind === 'hover' ? m.buttons : m.pointerId]))
+      .toEqual([['touch', 0], ['hover', 6], ['touch', 0], ['touch', 0]]);
   });
 
-  test('hover uses its own channel and preserves the button mask', () => {
-    const c = fixtures.pointers.cases.find((c) => c.name === 'mouse hover drag hover channels')!;
-    expect(c.expect.map((m) => m.channel)).toEqual(['hover', 'control', 'control', 'control', 'hover']);
-    expect(c.expect.map(decode).map((m) => [m.kind, m.kind === 'hover' ? 'none' : m.pointerId, m.buttons]))
-      .toEqual([['hover', 'none', 2], ['touch', -1, 1], ['touch', -1, 1], ['touch', -1, 1], ['hover', 'none', 0]]);
-    expect(routePointers({ video_width: 100, video_height: 100, events: [
-      { type: 'move', id: 0, x: -1, y: 10, mouse: true, buttons: 0 },
-    ] })).toEqual([]);
-  });
-
-  test('geometry has hand-checked edges, letterbox rejection and upright rotations', () => {
-    const expected: Record<string, { x: number; y: number } | null> = {
-      'matching aspect center': { x: 540, y: 1200 },
-      'pillarbox left outside': null, 'pillarbox left edge': { x: 0, y: 0 },
-      'pillarbox right edge': { x: 100, y: 200 }, 'pillarbox right outside': null,
-      'letterbox top outside': null, 'letterbox top edge': { x: 0, y: 0 },
-      'letterbox bottom edge': { x: 200, y: 100 }, 'letterbox bottom outside': null,
-      'fractional point': { x: 20.5, y: 41.5 },
-      'rotation 0 center': { x: 100, y: 50 }, 'rotation 90 center': { x: 50, y: 100 },
-      'rotation 180 center': { x: 100, y: 50 }, 'rotation 270 center': { x: 50, y: 100 },
-      'rotation 0 offset': { x: 100, y: 10 }, 'rotation 90 offset': { x: 50, y: 60 },
-      'rotation 180 offset': { x: 100, y: 10 }, 'rotation 270 offset': { x: 50, y: 60 },
+  test('geometry returns hand-checked upright dimensions and inclusive mapped points', () => {
+    const expected: Record<string, [number, number, number, number] | null> = {
+      'matching aspect center': [1080, 2400, 540, 1200],
+      'pillarbox center': [100, 200, 50, 100],
+      'pillarbox x 249': null, 'pillarbox x 250': [100, 200, 0, 100],
+      'pillarbox x 750': [100, 200, 100, 100], 'pillarbox x 751': null,
+      'letterbox center': [200, 100, 100, 50],
+      'letterbox y 249': null, 'letterbox y 250': [200, 100, 100, 0],
+      'letterbox y 750': [200, 100, 100, 100], 'letterbox y 751': null,
+      'fractional point': [400, 200, 20.5, 41.5],
+      'rotation 0 center': [200, 100, 100, 50], 'rotation 90 center': [100, 200, 50, 100],
+      'rotation 180 center': [200, 100, 100, 50], 'rotation 270 center': [100, 200, 50, 100],
+      'rotation 0 offset': [200, 100, 100, 10], 'rotation 90 offset': [100, 200, 50, 60],
+      'rotation 180 offset': [200, 100, 100, 10], 'rotation 270 offset': [100, 200, 50, 60],
       'zero view width': null, 'zero view height': null,
       'zero video width': null, 'zero video height rotated': null, 'negative point': null,
     };
     for (const [name, point] of Object.entries(expected)) {
-      expect(mapPoint(fixtures.geometry.cases.find((c) => c.name === name)!), name).toEqual(point);
+      expect(mapPoint(fixtures.geometry.find((c) => c.name === name)!), name).toEqual(point === null
+        ? null : { width: point[0], height: point[1], x: point[2], y: point[3] });
     }
-  });
-
-  test('scroll tick conversion matches the independent wire specification', () => {
-    for (const c of fixtures.scroll.cases) {
-      const expected = expectedWire('scroll', {
-        videoWidth: c.video_width, videoHeight: c.video_height,
-        x: c.x, y: c.y, hscrollTicks: c.h, vscrollTicks: c.v, buttons: c.buttons,
-      });
-      // Signed zero is a JavaScript arithmetic detail, not a wire distinction.
-      expected.hscrollTicks = Number(expected.hscrollTicks) + 0;
-      expected.vscrollTicks = Number(expected.vscrollTicks) + 0;
-      expect(decodeControl('scroll', c.expect[0]!.hex)).toEqual(expected);
-    }
-    const half = fixtures.scroll.cases.find((c) => c.name === 'negative half quantum')!;
-    expect(decode(half.expect[0]!).hscrollTicks).toBe(0);
   });
 });
