@@ -1,0 +1,327 @@
+{
+  "cases": [
+    {
+      "name": "matching aspect center",
+      "view_width": 540,
+      "view_height": 1200,
+      "video_width": 1080,
+      "video_height": 2400,
+      "rotation": 0,
+      "x": 270,
+      "y": 600,
+      "expect": {
+        "x": 540,
+        "y": 1200
+      }
+    },
+    {
+      "name": "pillarbox center",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 100,
+      "video_height": 200,
+      "rotation": 0,
+      "x": 500,
+      "y": 500,
+      "expect": {
+        "x": 50,
+        "y": 100
+      }
+    },
+    {
+      "name": "pillarbox left outside",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 100,
+      "video_height": 200,
+      "rotation": 0,
+      "x": 249,
+      "y": 500,
+      "expect": null
+    },
+    {
+      "name": "pillarbox left edge",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 100,
+      "video_height": 200,
+      "rotation": 0,
+      "x": 250,
+      "y": 0,
+      "expect": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "name": "pillarbox right edge",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 100,
+      "video_height": 200,
+      "rotation": 0,
+      "x": 750,
+      "y": 1000,
+      "expect": {
+        "x": 100,
+        "y": 200
+      }
+    },
+    {
+      "name": "pillarbox right outside",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 100,
+      "video_height": 200,
+      "rotation": 0,
+      "x": 751,
+      "y": 500,
+      "expect": null
+    },
+    {
+      "name": "letterbox center",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 500,
+      "y": 500,
+      "expect": {
+        "x": 100,
+        "y": 50
+      }
+    },
+    {
+      "name": "letterbox top outside",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 500,
+      "y": 249,
+      "expect": null
+    },
+    {
+      "name": "letterbox top edge",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 0,
+      "y": 250,
+      "expect": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "name": "letterbox bottom edge",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 1000,
+      "y": 750,
+      "expect": {
+        "x": 200,
+        "y": 100
+      }
+    },
+    {
+      "name": "letterbox bottom outside",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 500,
+      "y": 751,
+      "expect": null
+    },
+    {
+      "name": "fractional point",
+      "view_width": 200,
+      "view_height": 100,
+      "video_width": 400,
+      "video_height": 200,
+      "rotation": 0,
+      "x": 10.25,
+      "y": 20.75,
+      "expect": {
+        "x": 20.5,
+        "y": 41.5
+      }
+    },
+    {
+      "name": "rotation 0 center",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 500,
+      "y": 500,
+      "expect": {
+        "x": 100,
+        "y": 50
+      }
+    },
+    {
+      "name": "rotation 0 offset",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 500,
+      "y": 300,
+      "expect": {
+        "x": 100,
+        "y": 10
+      }
+    },
+    {
+      "name": "rotation 90 center",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 90,
+      "x": 500,
+      "y": 500,
+      "expect": {
+        "x": 50,
+        "y": 100
+      }
+    },
+    {
+      "name": "rotation 90 offset",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 90,
+      "x": 500,
+      "y": 300,
+      "expect": {
+        "x": 50,
+        "y": 60
+      }
+    },
+    {
+      "name": "rotation 180 center",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 180,
+      "x": 500,
+      "y": 500,
+      "expect": {
+        "x": 100,
+        "y": 50
+      }
+    },
+    {
+      "name": "rotation 180 offset",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 180,
+      "x": 500,
+      "y": 300,
+      "expect": {
+        "x": 100,
+        "y": 10
+      }
+    },
+    {
+      "name": "rotation 270 center",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 270,
+      "x": 500,
+      "y": 500,
+      "expect": {
+        "x": 50,
+        "y": 100
+      }
+    },
+    {
+      "name": "rotation 270 offset",
+      "view_width": 1000,
+      "view_height": 1000,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 270,
+      "x": 500,
+      "y": 300,
+      "expect": {
+        "x": 50,
+        "y": 60
+      }
+    },
+    {
+      "name": "zero view width",
+      "view_width": 0,
+      "view_height": 100,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 0,
+      "y": 0,
+      "expect": null
+    },
+    {
+      "name": "zero view height",
+      "view_width": 100,
+      "view_height": 0,
+      "video_width": 200,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 0,
+      "y": 0,
+      "expect": null
+    },
+    {
+      "name": "zero video width",
+      "view_width": 100,
+      "view_height": 100,
+      "video_width": 0,
+      "video_height": 100,
+      "rotation": 0,
+      "x": 0,
+      "y": 0,
+      "expect": null
+    },
+    {
+      "name": "zero video height rotated",
+      "view_width": 100,
+      "view_height": 100,
+      "video_width": 200,
+      "video_height": 0,
+      "rotation": 90,
+      "x": 0,
+      "y": 0,
+      "expect": null
+    },
+    {
+      "name": "negative point",
+      "view_width": 100,
+      "view_height": 100,
+      "video_width": 100,
+      "video_height": 100,
+      "rotation": 0,
+      "x": -1,
+      "y": -1,
+      "expect": null
+    }
+  ]
+}

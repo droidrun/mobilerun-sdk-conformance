@@ -4,7 +4,7 @@ Shared conformance fixtures for the Mobilerun device stream SDKs (Swift, Kotlin,
 
 The fixtures are generated from the published `@mobilerun/react` package (pinned to an exact version), so every SDK is tested against the bytes and messages the React package actually produces. A CI check fails if regenerating the fixtures changes anything.
 
-Stage T0a covers control messages, signalling messages and reconnect scenarios. Event frames are not part of this stage.
+The fixtures cover control messages, signalling messages, reconnect scenarios and local input routing. Event frames are not part of this stage.
 
 ## Layout
 
@@ -20,6 +20,12 @@ fixtures/
   reconnect/
     policy.json               reconnect constants and the backoff delay table
     scenarios.json            reconnect state machine scenarios as data
+  input/
+    keys.json                 keyboard event routing and modifier normalization
+    ime.json                  SDK text commit and composition decisions
+    pointers.json             touch slots, mouse gestures and hover channel routing
+    geometry.json             letterbox mapping and upright rotation dimensions
+    scroll.json               abstract wheel ticks to wire messages
 generator/                    Bun + TypeScript generator and self-tests
 ```
 
@@ -80,6 +86,40 @@ The scenarios are the cases of the React package's reconnect unit tests. Their h
 
 None. Every case is expressible as data. The two delay-function tests are in `policy.json` (`delay_cases`), and the watchdog-budget test is the policy invariant `connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms` (timeouts from `sequence.json` timing).
 
+## Input vectors
+
+Each file in `input/` is `{ "cases": [ ... ] }`. Cases have a unique `name`, the input fields below, and `expect`. Except for geometry, `expect` is an ordered list of `{ "channel": "control" | "hover", "hex": "..." }`; an empty list means no message. Replay each case independently with fresh state, collecting messages in send order and comparing channel and bytes exactly. All channels are open, the video is focused and available, and clipboard reads succeed. These vectors specify routing, not DOM focus, channel availability, frame coalescing or operating-system event translation.
+
+The reference in `generator/src/input.ts` calls the real encoders and constants from the pinned `@mobilerun/react` package; it does not encode bytes itself. Keyboard routing follows `src/hooks/use-scrcpy-input.ts` at React commit `68098f4bb8df0e6af5bc10a093a77b1e63a7423b`, whose hook source matches the published `0.2.1` source map. Self-tests compare every keyboard case with the actual published hook, and independently decode and re-encode all generated input messages.
+
+| File | Case inputs | Replay rule and source |
+|---|---|---|
+| `keys.json` | `type` (`keydown`/`keyup`), `code`, `key`, `shift`, `alt`, `ctrl`, `meta`, `caps_lock`, `clipboard` | Pass one event through React's keyboard routing. Flags are booleans; `key` is the produced browser key value and `code` is its physical code. Each case is independent, including keyup cases. |
+| `ime.json` | `operation`, `text` | Apply one SDK operation: `commit`, `delete`, `composition_update`, or `composition_end`, as described below. |
+| `pointers.json` | `video_width`, `video_height`, `events[]` | Start with no active pointers; replay events in array order, concatenate all emitted messages, then compare with `expect`. Each event has `type` (`down`/`move`/`up`/`cancel`), `id`, `x`, `y`, `mouse`, `buttons`. Positions are already in upright video pixels. |
+| `geometry.json` | `view_width`, `view_height`, `video_width`, `video_height`, `rotation`, `x`, `y` | Map the view-local point to upright video pixels. `expect` is `{ "x", "y" }` or `null`; no wire message is emitted. Compare coordinates with absolute tolerance `1e-6` pixels. |
+| `scroll.json` | `video_width`, `video_height`, `x`, `y`, `h`, `v`, `buttons` | Pass abstract horizontal/vertical ticks directly to React's scroll encoder. Positive ticks mean left/up. The browser's wheel delta-mode conversion and sign inversion have already happened. |
+
+### React paths
+
+Keyboard shortcut handling has first priority on keydown: Ctrl/Cmd+V sends one SET_CLIPBOARD with `paste = true` if `clipboard` is nonempty; Ctrl/Cmd+M sends MENU down and up with no modifiers. Keyup follows normal routing, so these shortcut keys can still emit their ordinary V/M keycode up when Ctrl/Cmd remains held.
+
+Next, React tests `key` for named control/navigation keys, modifier prefixes, arrow prefixes, its `F` prefix heuristic (length at most three UTF-16 code units), or a held Ctrl/Meta flag. These use `codeMap` and emit keycode down/up when mapped. The heuristic also classifies the single uppercase `F` as a control key; F13–F24 are unmapped in the current `codeMap` and emit nothing. Browser NumpadEnter uses `code = "NumpadEnter"`, `key = "Enter"`.
+
+For remaining keys, keydown with `key.length === 1` (UTF-16 code units) sends INJECT_TEXT, including control characters and unknown physical codes. It emits nothing on keyup. Other keydown values use a mapped keycode DOWN fallback; their keyup emits nothing. An unmapped code emits nothing when it reaches the keycode path. A non-BMP emoji occupies two UTF-16 code units and therefore takes the fallback, as the vectors demonstrate.
+
+Keycode metadata contains only SHIFT `1`, ALT `2`, CTRL `4096` and META `65536`. For letter codes `KeyA`–`KeyZ`, effective shift is physical shift XOR CapsLock. CapsLock does not toggle shift for nonletters. Repeat is always zero.
+
+React also supplies the scroll tick-to-i16 fixed-point rule (ticks/16, clamp, round, saturate), the binary encoders, and the pointer rules that ignore outside movement and release UP/CANCEL at the last in-video position. All pointer messages use pressure `1` and PRIMARY for both action button and buttons, including UP/CANCEL, matching the React touch builder calls.
+
+### SDK decisions
+
+React has no IME commit API. `commit` splits text at LF, CR, CRLF and TAB: printable text runs use INJECT_TEXT, CRLF counts as one ENTER down/up, standalone CR/LF use ENTER down/up, and TAB uses TAB down/up. Other C0 controls (`U+0000`–`U+001F`), DEL and C1 controls (`U+007F`–`U+009F`) are dropped and do not break a remaining text run. Unicode outside those ranges is preserved. `delete` uses `text` as the local buffer: only an empty buffer emits DEL down/up. Composition updates remain local; `composition_end` sends the nonempty finalized string as one INJECT_TEXT without splitting. Empty operations emit nothing. Synthetic presses have repeat and metadata zero.
+
+The SDK pointer adapter assigns each touch id the lowest free stable slot `0`–`9`; an eleventh concurrent touch is ignored. A released slot is reusable immediately; duplicate active downs and unmatched touch events are ignored. Mouse identity is separate from touch identity, ignores the event's `id`, and always uses wire pointer id `-1`. Bounds are inclusive. An outside DOWN is ignored. Active MOVE outside is ignored; UP/CANCEL releases at the last valid position even if the release coordinates are elsewhere. Mouse MOVE with no active mouse gesture emits a hover frame on `hover`, preserving `buttons`; it never falls back to `control`. These abstract mouse/hover events and slot allocation are SDK decisions; the underlying hover encoder/channel and last-position rule come from React.
+
+Geometry is an SDK input contract built on aspect-fit letterboxing. `rotation` is clockwise degrees (`0`, `90`, `180`, `270`) applied to the decoded `video_width`/`video_height`: 90/270 swap dimensions. Both the input view point and output video point use the upright picture's axes, so no additional inverse rotation is applied. Fit that upright picture inside the view, center it, reject points in the letterbox, and map inclusively onto video pixels without rounding. Nonpositive view/video dimensions yield `null`. Wire encoders perform coordinate rounding later. Inputs are finite JSON numbers; dimensions are integers.
+
 ## Regeneration
 
 ```sh
@@ -94,13 +134,19 @@ git diff --exit-code ../fixtures
 
 To move to a newer React release: bump the pin, refresh the vendored file from the same tag, regenerate, review the fixture diff and release a new tag.
 
-CI runs the same steps and fails on any diff in `fixtures/`. The self-test decodes every control fixture back to its arguments with an independent decoder and replays every reconnect scenario against the reference controller.
+CI runs the same steps and fails on any diff in `fixtures/`, including input vectors. The self-test decodes every control fixture back to its arguments with an independent decoder, replays every reconnect scenario against the reference controller, and checks input routing, channel selection, slot allocation and geometry against the rules above.
 
 ## Versioning
 
 Semantic version tags (`v0.1.0` after the first merge). A change that alters any fixture byte is a new tag; a change that breaks existing consumers (renamed file, changed shape) is a major bump from `v1.0.0` on.
 
 ## Changelog
+
+### v0.2.0
+
+- Added language-neutral input vectors for keyboard routing, modifiers, IME commits, touch slots, mouse/hover, letterbox geometry and scroll ticks.
+- Documented React routing parity separately from SDK decisions; added published-hook parity and input-message round-trip self-tests.
+- Existing control, signalling and reconnect fixture files are unchanged.
 
 ### v0.1.1
 

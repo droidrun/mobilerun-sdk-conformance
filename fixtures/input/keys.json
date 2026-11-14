@@ -1,0 +1,3920 @@
+{
+  "cases": [
+    {
+      "name": "single character U+0061 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "a",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000061"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0061 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "a",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0041 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "A",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000041"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0041 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "A",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+00e9 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "é",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0102000000c3a9"
+        }
+      ]
+    },
+    {
+      "name": "single character U+00e9 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "é",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+4e2d keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "中",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0103000000e4b8ad"
+        }
+      ]
+    },
+    {
+      "name": "single character U+4e2d keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "中",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0020 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": " ",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000020"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0020 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": " ",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0021 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "!",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000021"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0021 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "!",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0000 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "\u0000",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000000"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0000 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "\u0000",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0001 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "\u0001",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000001"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0001 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "\u0001",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0009 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "\t",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000009"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0009 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "\t",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+000a keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "\n",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "01010000000a"
+        }
+      ]
+    },
+    {
+      "name": "single character U+000a keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "\n",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+000d keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "\r",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "01010000000d"
+        }
+      ]
+    },
+    {
+      "name": "single character U+000d keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "\r",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+001b keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "\u001b",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "01010000001b"
+        }
+      ]
+    },
+    {
+      "name": "single character U+001b keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "\u001b",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+007f keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "01010000007f"
+        }
+      ]
+    },
+    {
+      "name": "single character U+007f keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "single character U+0085 keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0102000000c285"
+        }
+      ]
+    },
+    {
+      "name": "single character U+0085 keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code printable keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "a",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000061"
+        }
+      ]
+    },
+    {
+      "name": "unknown code printable keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "a",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code control character keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "\u0001",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000001"
+        }
+      ]
+    },
+    {
+      "name": "unknown code control character keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "\u0001",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code nontext keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "Unidentified",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code nontext keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "Unidentified",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code named control keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "Enter",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code named control keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "Enter",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code ctrl combo keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "a",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "unknown code ctrl combo keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "a",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "uppercase f control heuristic keydown",
+      "type": "keydown",
+      "code": "KeyF",
+      "key": "F",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000220000000000000001000000"
+        }
+      ]
+    },
+    {
+      "name": "uppercase f control heuristic keyup",
+      "type": "keyup",
+      "code": "KeyF",
+      "key": "F",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001220000000000000001000000"
+        }
+      ]
+    },
+    {
+      "name": "dead key mapped fallback keydown",
+      "type": "keydown",
+      "code": "Quote",
+      "key": "Dead",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00004b0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "dead key mapped fallback keyup",
+      "type": "keyup",
+      "code": "Quote",
+      "key": "Dead",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "dead key unknown fallback keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "Dead",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "dead key unknown fallback keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "Dead",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "emoji utf16 fallback keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "😀",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "emoji utf16 fallback keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "😀",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "emoji unknown fallback keydown",
+      "type": "keydown",
+      "code": "Unidentified",
+      "key": "😀",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "emoji unknown fallback keyup",
+      "type": "keyup",
+      "code": "Unidentified",
+      "key": "😀",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "empty key fallback keydown",
+      "type": "keydown",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "empty key fallback keyup",
+      "type": "keyup",
+      "code": "KeyA",
+      "key": "",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "combining text fallback keydown",
+      "type": "keydown",
+      "code": "KeyE",
+      "key": "é",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000210000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "combining text fallback keyup",
+      "type": "keyup",
+      "code": "KeyE",
+      "key": "é",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "caps lock fallback keydown",
+      "type": "keydown",
+      "code": "CapsLock",
+      "key": "CapsLock",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "caps lock fallback keyup",
+      "type": "keyup",
+      "code": "CapsLock",
+      "key": "CapsLock",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "context menu fallback keydown",
+      "type": "keydown",
+      "code": "ContextMenu",
+      "key": "ContextMenu",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000520000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "context menu fallback keyup",
+      "type": "keyup",
+      "code": "ContextMenu",
+      "key": "ContextMenu",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "backspace keydown",
+      "type": "keydown",
+      "code": "Backspace",
+      "key": "Backspace",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000430000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "backspace keyup",
+      "type": "keyup",
+      "code": "Backspace",
+      "key": "Backspace",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001430000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "delete keydown",
+      "type": "keydown",
+      "code": "Delete",
+      "key": "Delete",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000700000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "delete keyup",
+      "type": "keyup",
+      "code": "Delete",
+      "key": "Delete",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001700000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "enter keydown",
+      "type": "keydown",
+      "code": "Enter",
+      "key": "Enter",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000420000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "enter keyup",
+      "type": "keyup",
+      "code": "Enter",
+      "key": "Enter",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001420000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "tab keydown",
+      "type": "keydown",
+      "code": "Tab",
+      "key": "Tab",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00003d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "tab keyup",
+      "type": "keyup",
+      "code": "Tab",
+      "key": "Tab",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00013d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "escape keydown",
+      "type": "keydown",
+      "code": "Escape",
+      "key": "Escape",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00006f0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "escape keyup",
+      "type": "keyup",
+      "code": "Escape",
+      "key": "Escape",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00016f0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "home keydown",
+      "type": "keydown",
+      "code": "Home",
+      "key": "Home",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00007a0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "home keyup",
+      "type": "keyup",
+      "code": "Home",
+      "key": "Home",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00017a0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "end keydown",
+      "type": "keydown",
+      "code": "End",
+      "key": "End",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00007b0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "end keyup",
+      "type": "keyup",
+      "code": "End",
+      "key": "End",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00017b0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "pageup keydown",
+      "type": "keydown",
+      "code": "PageUp",
+      "key": "PageUp",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00005c0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "pageup keyup",
+      "type": "keyup",
+      "code": "PageUp",
+      "key": "PageUp",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00015c0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "pagedown keydown",
+      "type": "keydown",
+      "code": "PageDown",
+      "key": "PageDown",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00005d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "pagedown keyup",
+      "type": "keyup",
+      "code": "PageDown",
+      "key": "PageDown",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00015d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "insert keydown",
+      "type": "keydown",
+      "code": "Insert",
+      "key": "Insert",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00007c0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "insert keyup",
+      "type": "keyup",
+      "code": "Insert",
+      "key": "Insert",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00017c0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowup keydown",
+      "type": "keydown",
+      "code": "ArrowUp",
+      "key": "ArrowUp",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000130000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowup keyup",
+      "type": "keyup",
+      "code": "ArrowUp",
+      "key": "ArrowUp",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001130000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowdown keydown",
+      "type": "keydown",
+      "code": "ArrowDown",
+      "key": "ArrowDown",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000140000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowdown keyup",
+      "type": "keyup",
+      "code": "ArrowDown",
+      "key": "ArrowDown",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001140000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowleft keydown",
+      "type": "keydown",
+      "code": "ArrowLeft",
+      "key": "ArrowLeft",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000150000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowleft keyup",
+      "type": "keyup",
+      "code": "ArrowLeft",
+      "key": "ArrowLeft",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001150000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowright keydown",
+      "type": "keydown",
+      "code": "ArrowRight",
+      "key": "ArrowRight",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000160000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "arrowright keyup",
+      "type": "keyup",
+      "code": "ArrowRight",
+      "key": "ArrowRight",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001160000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "numpad enter keydown",
+      "type": "keydown",
+      "code": "NumpadEnter",
+      "key": "Enter",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000a00000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "numpad enter keyup",
+      "type": "keyup",
+      "code": "NumpadEnter",
+      "key": "Enter",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001a00000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f1 keydown",
+      "type": "keydown",
+      "code": "F1",
+      "key": "F1",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000830000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f1 keyup",
+      "type": "keyup",
+      "code": "F1",
+      "key": "F1",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001830000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f2 keydown",
+      "type": "keydown",
+      "code": "F2",
+      "key": "F2",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000840000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f2 keyup",
+      "type": "keyup",
+      "code": "F2",
+      "key": "F2",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001840000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f3 keydown",
+      "type": "keydown",
+      "code": "F3",
+      "key": "F3",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000850000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f3 keyup",
+      "type": "keyup",
+      "code": "F3",
+      "key": "F3",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001850000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f4 keydown",
+      "type": "keydown",
+      "code": "F4",
+      "key": "F4",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000860000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f4 keyup",
+      "type": "keyup",
+      "code": "F4",
+      "key": "F4",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001860000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f5 keydown",
+      "type": "keydown",
+      "code": "F5",
+      "key": "F5",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000870000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f5 keyup",
+      "type": "keyup",
+      "code": "F5",
+      "key": "F5",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001870000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f6 keydown",
+      "type": "keydown",
+      "code": "F6",
+      "key": "F6",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000880000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f6 keyup",
+      "type": "keyup",
+      "code": "F6",
+      "key": "F6",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001880000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f7 keydown",
+      "type": "keydown",
+      "code": "F7",
+      "key": "F7",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000890000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f7 keyup",
+      "type": "keyup",
+      "code": "F7",
+      "key": "F7",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001890000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f8 keydown",
+      "type": "keydown",
+      "code": "F8",
+      "key": "F8",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00008a0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f8 keyup",
+      "type": "keyup",
+      "code": "F8",
+      "key": "F8",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00018a0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f9 keydown",
+      "type": "keydown",
+      "code": "F9",
+      "key": "F9",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00008b0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f9 keyup",
+      "type": "keyup",
+      "code": "F9",
+      "key": "F9",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00018b0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f10 keydown",
+      "type": "keydown",
+      "code": "F10",
+      "key": "F10",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00008c0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f10 keyup",
+      "type": "keyup",
+      "code": "F10",
+      "key": "F10",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00018c0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f11 keydown",
+      "type": "keydown",
+      "code": "F11",
+      "key": "F11",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00008d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f11 keyup",
+      "type": "keyup",
+      "code": "F11",
+      "key": "F11",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00018d0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f12 keydown",
+      "type": "keydown",
+      "code": "F12",
+      "key": "F12",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00008e0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f12 keyup",
+      "type": "keyup",
+      "code": "F12",
+      "key": "F12",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00018e0000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "f13 keydown",
+      "type": "keydown",
+      "code": "F13",
+      "key": "F13",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f13 keyup",
+      "type": "keyup",
+      "code": "F13",
+      "key": "F13",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f14 keydown",
+      "type": "keydown",
+      "code": "F14",
+      "key": "F14",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f14 keyup",
+      "type": "keyup",
+      "code": "F14",
+      "key": "F14",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f15 keydown",
+      "type": "keydown",
+      "code": "F15",
+      "key": "F15",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f15 keyup",
+      "type": "keyup",
+      "code": "F15",
+      "key": "F15",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f16 keydown",
+      "type": "keydown",
+      "code": "F16",
+      "key": "F16",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f16 keyup",
+      "type": "keyup",
+      "code": "F16",
+      "key": "F16",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f17 keydown",
+      "type": "keydown",
+      "code": "F17",
+      "key": "F17",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f17 keyup",
+      "type": "keyup",
+      "code": "F17",
+      "key": "F17",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f18 keydown",
+      "type": "keydown",
+      "code": "F18",
+      "key": "F18",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f18 keyup",
+      "type": "keyup",
+      "code": "F18",
+      "key": "F18",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f19 keydown",
+      "type": "keydown",
+      "code": "F19",
+      "key": "F19",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f19 keyup",
+      "type": "keyup",
+      "code": "F19",
+      "key": "F19",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f20 keydown",
+      "type": "keydown",
+      "code": "F20",
+      "key": "F20",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f20 keyup",
+      "type": "keyup",
+      "code": "F20",
+      "key": "F20",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f21 keydown",
+      "type": "keydown",
+      "code": "F21",
+      "key": "F21",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f21 keyup",
+      "type": "keyup",
+      "code": "F21",
+      "key": "F21",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f22 keydown",
+      "type": "keydown",
+      "code": "F22",
+      "key": "F22",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f22 keyup",
+      "type": "keyup",
+      "code": "F22",
+      "key": "F22",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f23 keydown",
+      "type": "keydown",
+      "code": "F23",
+      "key": "F23",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f23 keyup",
+      "type": "keyup",
+      "code": "F23",
+      "key": "F23",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f24 keydown",
+      "type": "keydown",
+      "code": "F24",
+      "key": "F24",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "f24 keyup",
+      "type": "keyup",
+      "code": "F24",
+      "key": "F24",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "shift left keydown",
+      "type": "keydown",
+      "code": "ShiftLeft",
+      "key": "Shift",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00003b0000000000000001000000"
+        }
+      ]
+    },
+    {
+      "name": "shift left keyup",
+      "type": "keyup",
+      "code": "ShiftLeft",
+      "key": "Shift",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00013b0000000000000001000000"
+        }
+      ]
+    },
+    {
+      "name": "shift right keydown",
+      "type": "keydown",
+      "code": "ShiftRight",
+      "key": "Shift",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00003c0000000000000001000000"
+        }
+      ]
+    },
+    {
+      "name": "shift right keyup",
+      "type": "keyup",
+      "code": "ShiftRight",
+      "key": "Shift",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00013c0000000000000001000000"
+        }
+      ]
+    },
+    {
+      "name": "control left keydown",
+      "type": "keydown",
+      "code": "ControlLeft",
+      "key": "Control",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000710000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "control left keyup",
+      "type": "keyup",
+      "code": "ControlLeft",
+      "key": "Control",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001710000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "control right keydown",
+      "type": "keydown",
+      "code": "ControlRight",
+      "key": "Control",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000720000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "control right keyup",
+      "type": "keyup",
+      "code": "ControlRight",
+      "key": "Control",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001720000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "alt left keydown",
+      "type": "keydown",
+      "code": "AltLeft",
+      "key": "Alt",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000390000000000000002000000"
+        }
+      ]
+    },
+    {
+      "name": "alt left keyup",
+      "type": "keyup",
+      "code": "AltLeft",
+      "key": "Alt",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001390000000000000002000000"
+        }
+      ]
+    },
+    {
+      "name": "alt right keydown",
+      "type": "keydown",
+      "code": "AltRight",
+      "key": "Alt",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00003a0000000000000002000000"
+        }
+      ]
+    },
+    {
+      "name": "alt right keyup",
+      "type": "keyup",
+      "code": "AltRight",
+      "key": "Alt",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00013a0000000000000002000000"
+        }
+      ]
+    },
+    {
+      "name": "meta left keydown",
+      "type": "keydown",
+      "code": "MetaLeft",
+      "key": "Meta",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000750000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "meta left keyup",
+      "type": "keyup",
+      "code": "MetaLeft",
+      "key": "Meta",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001750000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "meta right keydown",
+      "type": "keydown",
+      "code": "MetaRight",
+      "key": "Meta",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000760000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "meta right keyup",
+      "type": "keyup",
+      "code": "MetaRight",
+      "key": "Meta",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001760000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "ctrl paste keydown",
+      "type": "keydown",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "héllo\n😀",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "090000000000000000010000000b68c3a96c6c6f0af09f9880"
+        }
+      ]
+    },
+    {
+      "name": "ctrl paste keyup",
+      "type": "keyup",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "héllo\n😀",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001320000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "ctrl uppercase paste keydown",
+      "type": "keydown",
+      "code": "KeyV",
+      "key": "V",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "text",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "090000000000000000010000000474657874"
+        }
+      ]
+    },
+    {
+      "name": "ctrl uppercase paste keyup",
+      "type": "keyup",
+      "code": "KeyV",
+      "key": "V",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "text",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001320000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "ctrl empty paste keydown",
+      "type": "keydown",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "ctrl empty paste keyup",
+      "type": "keyup",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001320000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "ctrl menu keydown",
+      "type": "keydown",
+      "code": "KeyM",
+      "key": "m",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000520000000000000000000000"
+        },
+        {
+          "channel": "control",
+          "hex": "0001520000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "ctrl menu keyup",
+      "type": "keyup",
+      "code": "KeyM",
+      "key": "m",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001290000000000000003100000"
+        }
+      ]
+    },
+    {
+      "name": "meta paste keydown",
+      "type": "keydown",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "héllo\n😀",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "090000000000000000010000000b68c3a96c6c6f0af09f9880"
+        }
+      ]
+    },
+    {
+      "name": "meta paste keyup",
+      "type": "keyup",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "héllo\n😀",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001320000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "meta uppercase paste keydown",
+      "type": "keydown",
+      "code": "KeyV",
+      "key": "V",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "text",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "090000000000000000010000000474657874"
+        }
+      ]
+    },
+    {
+      "name": "meta uppercase paste keyup",
+      "type": "keyup",
+      "code": "KeyV",
+      "key": "V",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "text",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001320000000000000001000100"
+        }
+      ]
+    },
+    {
+      "name": "meta empty paste keydown",
+      "type": "keydown",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "meta empty paste keyup",
+      "type": "keyup",
+      "code": "KeyV",
+      "key": "v",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001320000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "meta menu keydown",
+      "type": "keydown",
+      "code": "KeyM",
+      "key": "m",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000520000000000000000000000"
+        },
+        {
+          "channel": "control",
+          "hex": "0001520000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "meta menu keyup",
+      "type": "keyup",
+      "code": "KeyM",
+      "key": "m",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001290000000000000003000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 0 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 0 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 0 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 0 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 1 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 1 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 1 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 1 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 2 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 2 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 2 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 2 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 3 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 3 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 3 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000063"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 3 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": []
+    },
+    {
+      "name": "modifier mask 4 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 4 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 4 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 4 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 5 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 5 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 5 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 5 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 6 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000002100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 6 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000002100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 6 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 6 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 7 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 7 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 7 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000002100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 7 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000002100000"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 8 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 8 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 8 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000001000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 8 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000001000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 9 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000001000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 9 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000001000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 9 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 9 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000000000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 10 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000002000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 10 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000002000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 10 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 10 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 11 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 11 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 11 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000002000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 11 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": false,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000002000100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 12 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000000100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 12 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000000100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 12 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000001100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 12 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000001100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 13 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000001100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 13 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000001100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 13 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000000100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 13 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000000100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 14 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000002100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 14 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000002100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 14 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 14 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": false,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 15 caps false keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000003100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 15 caps false keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000003100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 15 caps true keydown",
+      "type": "keydown",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00001f0000000000000002100100"
+        }
+      ]
+    },
+    {
+      "name": "modifier mask 15 caps true keyup",
+      "type": "keyup",
+      "code": "KeyC",
+      "key": "c",
+      "shift": true,
+      "alt": true,
+      "ctrl": true,
+      "meta": true,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "00011f0000000000000002100100"
+        }
+      ]
+    },
+    {
+      "name": "caps lock nonletter keydown",
+      "type": "keydown",
+      "code": "Digit1",
+      "key": "Unidentified",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000080000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "caps lock nonletter keyup",
+      "type": "keyup",
+      "code": "Digit1",
+      "key": "Unidentified",
+      "shift": false,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001080000000000000000100000"
+        }
+      ]
+    },
+    {
+      "name": "caps lock nonletter shift keydown",
+      "type": "keydown",
+      "code": "Digit1",
+      "key": "Unidentified",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0000080000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "caps lock nonletter shift keyup",
+      "type": "keyup",
+      "code": "Digit1",
+      "key": "Unidentified",
+      "shift": true,
+      "alt": false,
+      "ctrl": true,
+      "meta": false,
+      "caps_lock": true,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "0001080000000000000001100000"
+        }
+      ]
+    },
+    {
+      "name": "alt printable keydown",
+      "type": "keydown",
+      "code": "KeyQ",
+      "key": "@",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": [
+        {
+          "channel": "control",
+          "hex": "010100000040"
+        }
+      ]
+    },
+    {
+      "name": "alt printable keyup",
+      "type": "keyup",
+      "code": "KeyQ",
+      "key": "@",
+      "shift": false,
+      "alt": true,
+      "ctrl": false,
+      "meta": false,
+      "caps_lock": false,
+      "clipboard": "",
+      "expect": []
+    }
+  ]
+}
