@@ -5,6 +5,7 @@ import { EVENTS, makeHarness, observe, type Scenario } from '../src/reconnect';
 
 const dir = join(import.meta.dir, '../../fixtures/reconnect');
 const policy = JSON.parse(readFileSync(join(dir, 'policy.json'), 'utf8'));
+const { timing } = JSON.parse(readFileSync(join(dir, '../signalling/sequence.json'), 'utf8'));
 const { events, scenarios } = JSON.parse(readFileSync(join(dir, 'scenarios.json'), 'utf8')) as {
   events: string[];
   scenarios: Scenario[];
@@ -41,7 +42,7 @@ function replay(sc: Scenario): string | null {
 
 describe('reconnect fixtures', () => {
   test('policy invariants hold', () => {
-    expect(policy.connect_timeout_ms).toBeGreaterThan(policy.ws_open_timeout_ms + policy.rtc_config_timeout_ms);
+    expect(policy.connect_timeout_ms).toBeGreaterThan(timing.ws_open_timeout_ms + timing.rtc_config_timeout_ms);
   });
 
   test('backoff formula reproduces every delay case', () => {

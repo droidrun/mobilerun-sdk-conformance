@@ -51,7 +51,7 @@ Notes that every port must match:
 - `pressure` is `round(pressure * 0xffff)` stored in an `i16`, so a pressure of `1.0` is `0xffff`, which is `-1` as `i16`. Cases `pressure 0.5` and `pressure 0` cover other values.
 - Scroll ticks are divided by 16, clamped to `[-1, 1]`, multiplied by `0x8000`, rounded, and capped at `0x7fff`. Positive means up/left.
 - `videoWidth`/`videoHeight` are `u16`; the fixtures stay within range.
-- Text is UTF-8 encoded from the string as is (no normalisation).
+- Text is UTF-8 encoded from the string as is (no normalisation), with one exception: an unpaired UTF-16 surrogate is written as U+FFFD (`efbfbd`), because React uses `TextEncoder`. Cases `lone high surrogate`, `lone low surrogate inside text`, `high surrogate at end after ascii` and `reversed surrogate pair` cover this (each unpaired surrogate becomes one `efbfbd`). Their `args.text` is stored with JSON `\uXXXX` escapes (for example `"ok\ud83d"`), which are not well-formed Unicode: consumers must parse lone surrogates (JSON parsers in Dart, Kotlin and Swift may reject or replace them; use a parser or a hex/escape workaround that keeps the code unit). Decoding these frames yields the U+FFFD text, not `args.text`, so the round trip is lossy for them.
 
 ### Signalling fixtures
 
@@ -59,7 +59,7 @@ Each `client-*`/`server-*` file is `{ type, direction, description, fields[]{nam
 
 ### Reconnect fixtures
 
-`policy.json` holds the constants and a table of `delay_cases` (`attempt`, `random`, `delay_ms`).
+`policy.json` holds the constants and a table of `delay_cases`. The handshake timeouts `ws_open_timeout_ms` and `rtc_config_timeout_ms` live only in `signalling/sequence.json` (`timing`); the watchdog invariant `connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms` reads them from there (`attempt`, `random`, `delay_ms`).
 
 `scenarios.json` is `{ events, scenarios }` (`events` lists the event vocabulary); each scenario is `{ name, random, steps, expect }`:
 
@@ -78,7 +78,7 @@ The scenarios are the cases of the React package's reconnect unit tests. Their h
 
 #### Manual ports
 
-None. Every case is expressible as data. The two delay-function tests are in `policy.json` (`delay_cases`), and the watchdog-budget test is the policy invariant `connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms`.
+None. Every case is expressible as data. The two delay-function tests are in `policy.json` (`delay_cases`), and the watchdog-budget test is the policy invariant `connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms` (timeouts from `sequence.json` timing).
 
 ## Regeneration
 
@@ -99,6 +99,13 @@ CI runs the same steps and fails on any diff in `fixtures/`. The self-test decod
 ## Versioning
 
 Semantic version tags (`v0.1.0` after the first merge). A change that alters any fixture byte is a new tag; a change that breaks existing consumers (renamed file, changed shape) is a major bump from `v1.0.0` on.
+
+## Changelog
+
+### v0.1.1
+
+- Added malformed-UTF-16 cases to `control/text` and `control/set-clipboard`.
+- Removed the duplicated handshake timeouts from `reconnect/policy.json`; consumers read them from `signalling/sequence.json`.
 
 ## License
 

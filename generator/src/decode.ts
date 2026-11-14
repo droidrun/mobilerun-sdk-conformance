@@ -121,6 +121,11 @@ export function expectedWire(kind: string, a: Args): Args {
       };
     case 'hover':
       return { ...a, x: rnd(n('x')), y: rnd(n('y')) };
+    case 'text':
+    case 'set-clipboard':
+      // Unpaired surrogates are written as U+FFFD, so decoding returns the
+      // well-formed string, not the original args (documented in the README).
+      return { ...a, text: (a.text as string).toWellFormed() };
     default:
       return { ...a };
   }
