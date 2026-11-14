@@ -6,6 +6,7 @@ import { buildControlFixtures } from './control-cases';
 import { buildSignalling, buildSequence } from './signalling';
 import { buildScenarios } from './scenarios';
 import { EVENTS, buildPolicy } from './reconnect';
+import { buildInputFixtures } from './input-cases';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../../fixtures');
 const write = (rel: string, data: unknown) => {
@@ -18,6 +19,7 @@ const write = (rel: string, data: unknown) => {
 rmSync(root, { recursive: true, force: true });
 
 for (const [kind, cases] of Object.entries(buildControlFixtures())) write(`control/${kind}.json`, { cases });
+for (const [kind, cases] of Object.entries(buildInputFixtures())) write(`input/${kind}.json`, { cases });
 
 write('constants.json', {
   control_msg_type: CONTROL_MSG_TYPE,

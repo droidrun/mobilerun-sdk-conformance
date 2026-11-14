@@ -89,7 +89,7 @@ const wrapI16 = (n: number) => ((((n + 0x8000) % 0x10000) + 0x10000) % 0x10000) 
 function scrollFixedPoint(ticks: number): number {
   const clamped = Math.max(-1, Math.min(1, ticks / 16));
   const scaled = Math.round(clamped * 0x8000);
-  return Math.min(scaled, 0x7fff);
+  return Math.min(scaled, 0x7fff) + 0; // Normalize signed zero to its integer wire value.
 }
 
 const rnd = (n: number) => Math.round(n) + 0; // +0 normalises -0
