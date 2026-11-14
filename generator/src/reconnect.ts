@@ -2,8 +2,6 @@ import {
   STREAM_CONNECT_TIMEOUT_MS,
   STREAM_RECONNECT_MAX_ATTEMPTS,
   STREAM_RECONNECT_STABILITY_MS,
-  STREAM_RTC_CONFIG_TIMEOUT_MS,
-  STREAM_WS_OPEN_TIMEOUT_MS,
   createStreamReconnectController,
   streamReconnectDelayMs,
   type StreamReconnectController,
@@ -124,8 +122,6 @@ export function buildPolicy() {
   const attempts = [1, 2, 3, 4, 5, 6, 7, 10];
   return {
     max_attempts: STREAM_RECONNECT_MAX_ATTEMPTS,
-    ws_open_timeout_ms: STREAM_WS_OPEN_TIMEOUT_MS,
-    rtc_config_timeout_ms: STREAM_RTC_CONFIG_TIMEOUT_MS,
     connect_timeout_ms: STREAM_CONNECT_TIMEOUT_MS,
     stability_ms: STREAM_RECONNECT_STABILITY_MS,
     backoff: {
@@ -138,6 +134,8 @@ export function buildPolicy() {
     delay_cases: attempts.flatMap((attempt) =>
       [0, NO_JITTER, 1].map((random) => ({ attempt, random, delay_ms: delay(attempt, random) })),
     ),
-    invariants: ['connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms'],
+    invariants: [
+      'connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms (the two handshake timeouts are defined in signalling/sequence.json timing)',
+    ],
   };
 }

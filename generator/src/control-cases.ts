@@ -225,6 +225,11 @@ const TEXTS: [string, string][] = [
   ['combining accent', 'é'],
   ['nul character', 'a\u0000b'],
   ['long ascii (300 chars)', 'x'.repeat(300)],
+  // Malformed UTF-16: React's TextEncoder writes U+FFFD (efbfbd) for each unpaired surrogate.
+  ['lone high surrogate', '\uD83D'],
+  ['lone low surrogate inside text', 'a\uDC00b'],
+  ['high surrogate at end after ascii', 'ok\uD83D'],
+  ['reversed surrogate pair', '\uDE00\uD83D'],
 ];
 
 const textCases = TEXTS.map(([name, text]) => ({ name, args: { text } }));
