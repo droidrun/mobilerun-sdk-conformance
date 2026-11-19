@@ -2,9 +2,12 @@
 
 Shared conformance fixtures for the Mobilerun device stream SDKs (Swift, Kotlin, Flutter, React).
 
-The fixtures are generated from the published `@mobilerun/react` package (pinned to an exact version), so every SDK is tested against the bytes and messages the React package actually produces. A CI check fails if regenerating the fixtures changes anything.
+Control, signalling, reconnect and input fixtures are generated from the published `@mobilerun/react`
+package (pinned to an exact version). Token-provider fixtures are independently specified lifecycle
+oracles with separate source provenance below. CI fails if regeneration changes any fixture.
 
-The fixtures cover control messages, signalling messages, reconnect scenarios and local input routing. Event frames are not part of this stage.
+The fixtures cover control messages, signalling messages, reconnect scenarios, local input routing
+and per-socket token providers. Event frames are not part of this stage.
 
 ## Layout
 
@@ -26,6 +29,8 @@ fixtures/
     pointers.json             touch slots, mouse gestures and hover channel routing
     geometry.json             letterbox mapping and upright rotation dimensions
     scroll.json               abstract wheel ticks to wire messages
+  credentials/
+    token-provider.json       per-socket credential acquisition and lifecycle oracles
 generator/                    Bun + TypeScript generator and self-tests
 ```
 
@@ -85,6 +90,119 @@ The scenarios are the cases of the React package's reconnect unit tests. Their h
 #### Manual ports
 
 None. Every case is expressible as data. The two delay-function tests are in `policy.json` (`delay_cases`), and the watchdog-budget test is the policy invariant `connect_timeout_ms > ws_open_timeout_ms + rtc_config_timeout_ms` (timeouts from `sequence.json` timing).
+
+### Token-provider fixtures
+
+`credentials/token-provider.json` is additive; it does not extend the reconnect controller's event
+vocabulary. Its root contains `schema_version: 1`, `reference: {repo, commit, decision}`,
+`provider_timeout_ms: 10000`, `connect_timeout_ms: 45000`, and `cases`. These are literal lifecycle
+oracles in `generator/src/token-provider-cases.ts`, not outputs of the published React `0.2.1` package.
+The reference is `droidrun/mobilerun-react` at
+[`6f139eca842def898b61146428f90bb7ef22e830`][token-provider-source],
+specifically `src/hooks/use-webrtc-connection.ts`, its tests, and `src/lib/stream-reconnect.ts`.
+Decision D14 requires immediate media teardown on close 1001 in both credential modes.
+
+[token-provider-source]:
+  https://github.com/droidrun/mobilerun-react/commit/6f139eca842def898b61146428f90bb7ef22e830
+
+Each case has a unique `name`, `mode` (`provider` or `static`), `url`, optional `static_token`,
+`steps`, and `expect`. All keys are synthetic test strings and all non-loopback hosts use `.invalid`.
+The initial target is `a`, with callback identity `provider-a` in provider mode. Static mode has no
+callback; an omitted static token means nil/absent, and an empty token retains the existing URL
+query behavior. Provider mode never falls back to a static or embedded query token.
+The static token field/path is deprecated; target discovery remains a separate callback and keeps
+its existing semantics. The per-target async `tokenProvider` runs once per new socket, with an
+independent deadline and exactly one normal failure for a throw, rejection, blank key or timeout.
+Keep the returned key transient to the socket; never cache it in the committed target.
+
+Replay each case against the SDK's actual session engine or React hook, with fake time, external
+transports and provider IO. Do not implement a second token/session engine in the fixture adapter.
+Use jitter `0.5` and the existing `reconnect/policy.json` limits (six retries); discovery and heal
+callbacks return the current target unchanged and never mint keys. Mount each scheduled attempt
+immediately. Begin with no sockets, peers, media or pending screenshots and a visible application.
+Use the normal successful, empty-ICE-server configuration, offer/answer and channel setup when
+opening/configuring a peer; `peer_connected` completes that negotiation with live media/channels.
+
+Every step has `at_ms` and `event`. This vocabulary belongs only to this file:
+
+- `start`: start the session; optional `visible` sets initial visibility.
+  `provider_throws: true` makes the callback throw synchronously.
+- `provider_resolve`: resolve named `request_id` with raw string `value`.
+- `provider_reject`: reject named `request_id` with a generic synthetic error.
+- `socket_open`: open the current allocated fake socket.
+- `config`: deliver valid RTC configuration on that socket, including a refresh response when requested.
+- `peer_connected`: mark the current peer connected with live media and both negotiated channels.
+- `socket_close`: close the current socket with integer `code`; before open this is a refused upgrade.
+- `target_replace`: commit `target: {id, url, provider}`; callback identity is a fake-provider label.
+- `stop`, `dispose`, `parent_cancel`: invalidate the attempt and cancel owned work without waiting
+  for provider cooperation. Map parent cancellation to disposal where no parent scope exists.
+- `ICE_refresh`: request the existing socket's ICE credential/configuration refresh.
+- `screenshot`: start a screenshot request and leave its response pending.
+- `visibility`: set `visible` and deliver the SDK's visibility/lifecycle signal.
+- `retry`, `wake`: invoke manual retry (after exhaustion) or wake (during backoff).
+
+Name provider calls `p1`, `p2`, etc. in invocation order across the whole case, including retries
+and target replacements. A call stays externally settleable after timeout, stop or cancellation;
+the fake provider deliberately ignores cancellation. Every new attempt captures its current target's
+callback once. A same-id/same-URL callback-only replacement neither invalidates the in-flight call
+nor restarts healthy media; the next attempt uses the new callback. A changed logical target
+invalidates the previous attempt before any await.
+
+Replay with a fake clock starting at zero and `i = 0`:
+
+1. Keep common expectations plus those for the selected profile. For every row with
+   `after_steps == i`, advance to `at_ms` in ascending order, drain async queues, then assert.
+2. Advance to `steps[i].at_ms`, firing due timers in deadline order (insertion order breaks ties).
+   Drain async queues after each timer so an async failure schedules backoff at its deadline.
+3. Apply that step, drain async queues, increment `i`, and repeat. Stop after all expectations.
+
+At equal timestamps, timers fire before steps; `after_steps` distinguishes observations before
+and after an event. Expectations are partial observations: assert every supplied field, including
+nested fields, and ignore omitted fields. Absolute timer deadlines make allocation timing observable:
+
+- `provider_calls`, `socket_allocations`, `failures`, `heal_calls`: cumulative call, allocation,
+  normal attempt-failure and heal counts; never reset on retry.
+- `last_provider`: callback identity captured by the latest provider invocation.
+- `last_socket`: latest allocation's `target` id and decoded `token` (null if absent). Optional
+  `token_count` and ordered decoded `other_query` pairs assert URL replacement semantics.
+- `status`: normalized reconnect status: `connecting`, `connected`, `reconnecting`, `unavailable`.
+- `timers`: current attempt's `provider`, `connect`, `ws_open`, `rtc_config`, `retry` absolute
+  deadlines; null means absent. Stale attempts own no timers.
+- `media_active`: the current session still retains connected media.
+- `peer_released`, `channels_released`, `media_released`: all corresponding resources from the
+  last connected peer have been released.
+- `pending_screenshots`: outstanding screenshot requests, cleared/settled during teardown.
+- `keepalive_active`, `keepalive_sent`: a keepalive timer is bound to the current socket;
+  cumulative keepalive messages sent on it.
+- `state_unchanged_since_step`: no new state notification, failure, allocation or resource/timer
+  change since the last observation at that `after_steps` checkpoint. Compare after draining async
+  queues; exclude clock movement and fake-provider settlement itself.
+- `profile`: apply the row only to `react` or `native`; never silently skip an unknown profile.
+
+Only the connected-close-1006 cases use profiles. React preserves connected media and does not
+schedule a reconnect for that close. The native profile preserves its existing rebuild behavior:
+Kotlin releases on the next remount, while Swift and Flutter release immediately. Native rows
+therefore assert teardown by the next attempt, without imposing a new immediate-1006 rule.
+Historical native baselines are Kotlin `27f29c8c2017aaf4e04293cdfc3d2638e4e58a5f`,
+Swift `84ecab04bafcde82b3c2c9f2eda08389a02b81d5`, and
+Flutter `f586a15a381ffda6806c84a1a071c89ae4226167`.
+Close 1001 has no profile exception: peer, channels, media references, keepalive/startup timers
+and pending screenshots are released immediately, followed by normal bounded reconnect.
+
+The watchdog case resolves each key at 9000ms into its attempt, completes socket-open/configuration,
+then stalls ICE. It tests the full 45000ms socket budget through the final retry, independently of
+the 10000ms provider deadline and the two 15000ms handshake phase budgets. Raw nonblank keys are
+preserved; trimming is validation only. Provider-mode URL validation precedes callback invocation:
+WSS needs a valid host, and WS permits only localhost, 127.0.0.1 or IPv6 loopback. Static URL handling
+stays unchanged. ICE refresh on an existing socket does not invoke the provider.
+
+The fixture self-test validates integrity, coverage, boundaries and reproducible serialization;
+it does **not** prove runtime SDK compliance. SDK adapters must claim every case name exactly once,
+reject unknown events/observations, and replay the whole file through the real lifecycle. Existing
+controller-only reconnect suites remain valid but cannot replace these session-level replays.
+Consumers opt into an approved release tag via their existing sync scripts; do not track this
+development branch or claim four-SDK conformance before all four adapters pass the same pinned tag.
+This addition leaves existing fixture bytes unchanged and assigns no new release/tag itself.
 
 ## Input vectors
 
@@ -243,7 +361,9 @@ git diff --exit-code ../fixtures
 
 To move to a newer React release: bump the pin, refresh the vendored file from the same tag, regenerate, review the fixture diff and release a new tag.
 
-CI runs the same steps and fails on any diff in `fixtures/`, including input vectors. The self-test decodes every control fixture back to its arguments with an independent decoder, replays every reconnect scenario against the reference controller, and checks input routing, channel selection, slot allocation and geometry against the rules above.
+CI runs the same steps and fails on any diff in `fixtures/`, including input and credential vectors.
+The self-tests decode control fixtures, replay reconnect scenarios against the reference controller,
+check input routing and geometry, and validate the independent token-provider fixture contract.
 
 ## Versioning
 
