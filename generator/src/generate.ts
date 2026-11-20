@@ -7,6 +7,7 @@ import { buildSignalling, buildSequence } from './signalling';
 import { buildScenarios } from './scenarios';
 import { EVENTS, buildPolicy } from './reconnect';
 import { buildInputFixtures } from './input-cases';
+import { tokenProviderFixtures } from './token-provider-cases';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../../fixtures');
 const write = (rel: string, data: unknown) => {
@@ -37,3 +38,5 @@ write('reconnect/scenarios.json', {
   events: EVENTS,
   scenarios: buildScenarios(),
 });
+
+write('credentials/token-provider.json', tokenProviderFixtures);
